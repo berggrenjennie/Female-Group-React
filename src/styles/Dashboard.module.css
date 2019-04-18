@@ -1,0 +1,10 @@
+/* CSS for Dashboard Component only. */
+
+/* 
+For Weather Icon: Note that body color is defined to set the background 
+of the icons. 
+*/
+
+body {
+    color: #e6be3b;
+}
