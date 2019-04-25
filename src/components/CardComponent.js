@@ -15,35 +15,37 @@ import { userInfo } from 'os';
 
 
 
-//false means no errors aka entirely valid; true means a field is invalid.
-function validate(name, username, password) {
-    // true means invalid, so our conditions got reversed
-    return {
-      name: name.length === 0,
-      username: username.length === 0,
-      password: password.length === 0
 
+//validates registration form 
+function validateForm(name, username, password, location, temperature) {
+    return {
+      name: name.length < 2,
+      username: username === "",
+      password: password.length < 6,
+      location: location.length === 0,
+      temperature: temperature === ""
     };
   }
 
 export default class CardComponent extends Component {
 
-    
-
-
     constructor(props) {
         super(props);
         this.state = {
             showRegister: false, 
-            
-            name: "",
-            username: "",
-            password: "",
+              
+                name: "",
+                username: "",
+                password: "",
+                location: "",
+                temperature: "",
 
             touched: {
                 name: false,
                 username: false,
                 password: false,
+                location: false,
+                temperature: false,
               }
         };
     }
@@ -52,7 +54,6 @@ export default class CardComponent extends Component {
     showForm = () => {
         this.setState({ showRegister: true })
     }
-
 
     handleNameChange = evt => {
         this.setState({ name: evt.target.value });
@@ -63,22 +64,24 @@ export default class CardComponent extends Component {
       handlePasswordChange = evt => {
         this.setState({ password: evt.target.value });
       };
-
-
+      handleLocationChange = evt => {
+        this.setState({ location: evt.target.value });
+      };
+      handleTemperatureChange = evt => {
+        this.setState({ temperature: evt.target.value });
+    };
+      
     handleBlur = (field) => (evt) => {
         this.setState({
-          touched: { ...this.state.touched, [field]: true },
+          touched: { ...this.state.touched, [field]: true }
         });
       };
 
-
-
-
-
-
+    
     render() {   
         
-        const errors = validate(this.state.name, this.state.username, this.state.password);
+        const errors = validateForm(this.state.name, this.state.username, this.state.password, this.state.location, this.state.temperature);
+        
         const isDisabled = Object.keys(errors).some(x => errors[x]);
 
         const shouldMarkError = field => {
@@ -87,8 +90,6 @@ export default class CardComponent extends Component {
       
             return hasError ? shouldShow : false;
         };
-
-
         
         return (
             <Card className={style["card"]} style={{ backgroundColor: '#000' }}>
@@ -123,9 +124,14 @@ export default class CardComponent extends Component {
                             value={this.state.password} 
                             onChange={this.handlePasswordChange}
                             onBlur={this.handleBlur('password')}/>
-                            <input type="text" className="form-control" placeholder="location"/>                        
+                           
+                            <input type="text" className={shouldMarkError("location") ? "error" : ""}  
+                            placeholder="location" value={this.state.location} onChange={this.handleLocationChange}
+                            onBlur={this.handleBlur('location')}/>                        
                         </form>
-                        <select>
+
+                        <select 
+                        value={this.state.temperature} onChange={this.handleTemperatureChange}>
                             <option value="" selected disabled hidden>temperature</option>
                             <option value="C">Celcius</option>
                             <option value="F">Fahrenheit</option>
