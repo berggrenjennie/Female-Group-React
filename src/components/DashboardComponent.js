@@ -1,6 +1,9 @@
 // CSS and Material Design Imports
+import '../icons/weather.css';
+import style from '../styles/Dashboard.module.css';
 
 // Router and core functionality from react.
+import React, { Component } from 'react'
 
 // Existing component imports.
 
@@ -11,21 +14,16 @@
 // Grabs user info directly from local storage. 
 // Use HOC withHttp for weather fetch.
 
-import React, { Component } from 'react'
-
-import '../icons/weather.css';
-import style from '../styles/Dashboard.module.css';
-
 export default class DashboardComponent extends Component {
   render() {
     return (
-      <div>
-        <p>Hello and welcome! This is the start of our awesome weather app!</p>
-        <div className="icon whatevs">
-          <div className="sun">
-            <div className="rays"></div>
-          </div>
-        </div>
+        <div>
+            <p>Hello and welcome! This is the start of our awesome weather app!</p>
+            <div className="icon whatevs">
+            <div className="sun">
+                <div className="rays"></div>
+            </div>
+            </div>
       </div>
     )
   }

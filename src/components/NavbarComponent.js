@@ -1,9 +1,3 @@
-// CSS and Material Design Imports
-
-// Router and core functionality from react.
-
-// Existing component imports.
-
 // This is our Navbar. It'll be fairly simple, but will handle all of our routing.
 
 // CSS and Material Design Imports
@@ -19,9 +13,11 @@ import React, { Component } from 'react'
 // Existing component imports.
 import DashboardScreen from '../screens/DashboardScreen';
 import LoginScreen from '../screens/LoginScreen';
+import AccountScreen from '../screens/AccountScreen';
 
 // Handles all functionality for the Navbar and routing, including Navlinks,
 // Switch, Routes, and Redirect from /user to /login.
+
 export default class NavbarComponent extends Component {
     render() {
         return (
@@ -38,6 +34,9 @@ export default class NavbarComponent extends Component {
                                 <Button color="primary" size="large" type="submit" value="Submit">Dashboard</Button>
                             </div>
                         </NavLink>
+                        <NavLink to="/account" activeClassName={style["active"]}>
+                            <img src="https://www.datamaticsinc.com/wp-content/uploads/2015/09/silhou.png" alt="profile" style={{height: "80px"}}/>
+                        </NavLink>
                     </Toolbar>
                 </AppBar>
 
@@ -45,6 +44,7 @@ export default class NavbarComponent extends Component {
                     <Route exact path="/" component={LoginScreen} />
                     <Route exact path="/dashboard" component={DashboardScreen} />
                     <Route path="/login" component={LoginScreen} />
+                    <Route path="/account" component={AccountScreen} />
                 </Switch>
             </Router>
 
