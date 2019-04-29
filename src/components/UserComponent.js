@@ -13,10 +13,32 @@ import CardComponent from '../components/CardComponent';
 import React, { Component } from 'react'
 
 export default class UserComponent extends Component {
-    render() {
-        return (
-            <div>I work</div>
-        )
+
+
+    constructor(props) {
+        super(props);
     }
+
+
+
+    render() {
+
+
+
+        return (
+<div>
+            <div>{this.props.user.name}</div>
+        <p>{this.props.statuz}</p>
+
+</div>
+        )
+    
+}
+
+
+
+
+           
+    
 }
 
