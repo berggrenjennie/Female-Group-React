@@ -12,10 +12,9 @@ body {
     margin: 0;
     padding: 0;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    background-color: #838282;
+    background-color: rgba(27, 24, 43, 0.959);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-
   }
 
   p {
@@ -33,3 +32,4 @@ body {
     margin: 10px;
     padding: 20px;
   }
+

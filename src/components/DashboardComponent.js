@@ -16,13 +16,23 @@ import PropTypes from 'prop-types';
 // CSS and Material Design Imports
 import '../icons/weather.css';
 import style from '../styles/Dashboard.module.css';
+import Typography from '@material-ui/core/Typography';
+
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 // Use HOC withHttp for weather fetch.
 import withHttp from './../services/withHttp';
 
-
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#9e9e9e',
+    }
+  }
+})
 
 class DashboardComponent extends Component {
+  
 
   static propTypes = {
     getWeather: PropTypes.func.isRequired// The function getWeather is required .
@@ -82,7 +92,7 @@ return the cityId which will use sedan to get weatherData from API */
         })
       )
        .catch(error => this.setState({ error, isLoading: false }));
-
+      
     this.props.getLocation()
     .then(response =>
             // console.log(response.data)
@@ -90,7 +100,7 @@ return the cityId which will use sedan to get weatherData from API */
         locationData:response.data
       })
     );
-
+ 
    }
 
 
@@ -123,17 +133,18 @@ return the cityId which will use sedan to get weatherData from API */
           } = this.state;
 
     return (
+      
       <div>
-
+        <MuiThemeProvider theme={theme}>
+        <div className={style["card"]}>
         {/*Show username.*/}
-        <p>Hello Jennie(username)!</p>
+        <Typography variant="h5" color="primary" align="center" gutterBottom>
+          Hello, Jennie!
+        </Typography>
 
 
-        <div className="flex_Container">
-          {/*Show Current Day.*/}
-          <div>{list? this.getDateName(list[0].dt_txt):null}
-            <div>{list? list[0].dt_txt:null}</div>
-          </div>
+        <div>
+         
           {/*Show weather icon.*/}
             <div className="icon whatevs">
               {list? list[0].weather[0].main:null}
@@ -146,12 +157,17 @@ return the cityId which will use sedan to get weatherData from API */
                 <div className="rays"></div>
               </div>
           </div>
+          {/*Show Current Day.*/}
+          <div className={style["date_container"]}>
+            <div>{list? this.getDateName(list[0].dt_txt):null}
+             <div>{list? list[0].dt_txt:null}</div>
+            </div>
+            <div>
+              {/*Show Current tempretur and it's unit.*/}
+              <p>{list? list[0].main.temp+" "+tempUnit:null}</p>
+            </div>
+          </div>
         </div>
-
-
-        {/*Show Current tempretur and it's unit.*/}
-        <p>{list? "Temperature : "+list[0].main.temp+" "+tempUnit:null}</p>
-
 
         {/*Show Location.*/}
         <p>{weatherData.city? "City : "+weatherData.city.name:null}</p>
@@ -168,9 +184,10 @@ return the cityId which will use sedan to get weatherData from API */
             :null}
           </div>
         </div>
-
+      </div>
 
         {/*Show Wind Speed,Humidity and sunrise or sunset for the current day.*/}
+        <div className={style["threeday"]}>
         {!this.state.showThreeDays?
         <div className="flex_Container">
           <div>Wind Speed
@@ -204,6 +221,8 @@ return the cityId which will use sedan to get weatherData from API */
         </div>
         :null}
           <button type="button" onClick={this.toggleThreeDays}>Show three days!</button>
+      </div>
+      </MuiThemeProvider>
       </div>
     )
   }
