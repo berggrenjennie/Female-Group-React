@@ -1,6 +1,9 @@
 // CSS and Material Design Imports
+import '../icons/weather.css';
+import style from '../styles/Dashboard.module.css';
 
 // Router and core functionality from react.
+import React, { Component } from 'react'
 
 // Existing component imports.
 
