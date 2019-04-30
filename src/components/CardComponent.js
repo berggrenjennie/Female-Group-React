@@ -33,6 +33,7 @@ class CardComponent extends Component {
             location: "",
             temperature: "",
 
+
             touched: {
                 name: false,
                 username: false,

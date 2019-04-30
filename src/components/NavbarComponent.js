@@ -7,8 +7,9 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
 // Router and core functionality from react.
-import { BrowserRouter as Router, Route, NavLink, Switch } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import React, { Component } from 'react'
+
 
 // Existing component imports.
 import DashboardScreen from '../screens/DashboardScreen';
@@ -47,6 +48,7 @@ export default class NavbarComponent extends Component {
                     <Route path="/account" component={AccountScreen} />
                 </Switch>
             </Router>
+   
 
         )
     }
