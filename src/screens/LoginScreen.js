@@ -8,13 +8,13 @@
 // This is mostly for routing. Imports User Component.
 
 import React, { Component } from 'react'
-import CardComponent from '../components/CardComponent';
+import UserComponent from '../components/UserComponent';
 
 export default class LoginScreen extends Component {
 
     render() {
         return (
-            <CardComponent/>
+            <UserComponent/>
         )
     }
 }

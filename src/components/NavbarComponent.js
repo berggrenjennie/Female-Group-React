@@ -7,13 +7,13 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
 // Router and core functionality from react.
-import { BrowserRouter as Router, Route, NavLink, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, NavLink, Switch, Redirect } from "react-router-dom";
 import React, { Component } from 'react'
+
 
 // Existing component imports.
 import DashboardScreen from '../screens/DashboardScreen';
 import LoginScreen from '../screens/LoginScreen';
-import AccountScreen from '../screens/AccountScreen';
 
 // Handles all functionality for the Navbar and routing, including Navlinks,
 // Switch, Routes, and Redirect from /user to /login.
@@ -34,9 +34,6 @@ export default class NavbarComponent extends Component {
                                 <Button color="primary" size="large" type="submit" value="Submit">Dashboard</Button>
                             </div>
                         </NavLink>
-                        <NavLink to="/account" activeClassName={style["active"]}>
-                            <img src="https://www.datamaticsinc.com/wp-content/uploads/2015/09/silhou.png" alt="profile" style={{height: "80px"}}/>
-                        </NavLink>
                     </Toolbar>
                 </AppBar>
 
@@ -44,9 +41,9 @@ export default class NavbarComponent extends Component {
                     <Route exact path="/" component={LoginScreen} />
                     <Route exact path="/dashboard" component={DashboardScreen} />
                     <Route path="/login" component={LoginScreen} />
-                    <Route path="/account" component={AccountScreen} />
                 </Switch>
             </Router>
+   
 
         )
     }
