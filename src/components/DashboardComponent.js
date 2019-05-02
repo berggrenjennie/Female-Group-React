@@ -35,7 +35,7 @@ const theme = createMuiTheme({
 })
 
 class DashboardComponent extends Component {
-  
+
 
   static propTypes = {
     getWeather: PropTypes.func.isRequired// The function getWeather is required .
@@ -95,7 +95,7 @@ return the cityId which will use sedan to get weatherData from API */
         })
       )
        .catch(error => this.setState({ error, isLoading: false }));
-      
+
     this.props.getLocation()
     .then(response =>
             // console.log(response.data)
@@ -103,7 +103,7 @@ return the cityId which will use sedan to get weatherData from API */
         locationData:response.data
       })
     );
- 
+
    }
 
 
@@ -136,7 +136,7 @@ return the cityId which will use sedan to get weatherData from API */
           } = this.state;
 
     return (
-      
+
       <div>
         <MuiThemeProvider theme={theme}>
         <div className={style["card"]}>
@@ -147,7 +147,7 @@ return the cityId which will use sedan to get weatherData from API */
 
 
         <div>
-         
+
           {/*Show weather icon.*/}
             <div className="icon whatevs">
               {list? list[0].weather[0].main:null}
