@@ -1,9 +1,6 @@
 // CSS and Material Design Imports
-import '../icons/weather.css';
-import style from '../styles/Dashboard.module.css';
 
 // Router and core functionality from react.
-import React, { Component } from 'react'
 
 // Existing component imports.
 
@@ -19,15 +16,7 @@ import axios from 'axios';
 // CSS and Material Design Imports
 import '../icons/weather.css';
 import style from '../styles/Dashboard.module.css';
-
 // import Select from 'react-select';
-
-import Typography from '@material-ui/core/Typography';
-
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
-
-
 // Use HOC withHttp for weather fetch.
 import withHttp from './../services/withHttp';
 /* Interweave is a phenomenal library that is safe to toconvert a string text to HTML and
@@ -37,20 +26,9 @@ import SearchCityWeatherComponent from '../components/SearchCityWeatherComponent
 // import DashboardScreen from './../screens/DashboardScreen';
 // import DashboardComponent from './../components/DashboardComponent';
 
-
 import Select from 'react-select';
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#9e9e9e',
-    }
-  }
-})
-
-
 class DashboardComponent extends Component {
-  
 
   // static propTypes = {
   //   getWeather: PropTypes.func.isRequired// The function getWeather is required .
@@ -136,31 +114,8 @@ return the cityId which will use sedan to get weatherData from API */
 /* A method that controls and changes the value of the seach field in the form by using setState */
   handlesearchLocaction(event) {
     let searchCityInput= event.target.value;
-
     this.setState({searchLocaction:searchCityInput});
     this.searchCity(searchCityInput);
-  }
-    /*A method that calls the function (getWeather()) and (getLocation()) which they are props received from withHttp component. */
-  componentDidMount(){
-    this.props.getWeather()
-      .then(response =>
-            // console.log(response.data)
-        this.setState({
-          weatherData:response.data,
-          isLoading: true
-        })
-      )
-       .catch(error => this.setState({ error, isLoading: false }));
-      
-    this.props.getLocation()
-    .then(response =>
-            // console.log(response.data)
-      this.setState({
-        locationData:response.data
-      })
-    );
- 
-   }
 
 
   }
@@ -210,12 +165,9 @@ difindCityId(id){
     return (
 
       <div>
-        <MuiThemeProvider theme={theme}>
-        <div className={style["card"]}>
+
         {/*Show username.*/}
-        <Typography variant="h5" color="primary" align="center" gutterBottom>
-          Hello, Jennie!
-        </Typography>
+        <p>Hello Jennie(username)!</p>
 
         {list?
         <div className="flex_Container">
@@ -224,29 +176,15 @@ difindCityId(id){
             <div>{list[0].dt_txt}</div>
           </div>
 
-
-
-  
           {/*Show weather icon.*/}
             <div className="icon whatevs">
               < Markup content={this.getIconDiv(list[0].weather[0].icon)}/>
-          </div>
-          {/*Show Current Day.*/}
-          <div className={style["date_container"]}>
-            <div>{list? this.getDateName(list[0].dt_txt):null}
-             <div>{list? list[0].dt_txt:null}</div>
-            </div>
-            <div>
-              {/*Show Current tempretur and it's unit.*/}
-              <p>{list? list[0].main.temp+" "+tempUnit:null}</p>
-            </div>
           </div>
         </div>
         :null}
 
         {/*Show Current tempretur and it's unit.*/}
         <p>{list? list[0].main.temp+" "+tempUnit:null}</p>
-
 
         {/*Show Location.*/}
         <p>{weatherData.city? "City : "+weatherData.city.name:null}</p>
@@ -259,11 +197,10 @@ difindCityId(id){
            < SearchCityWeatherComponent/>
           <div>
             {this.state.cityId?
-
                 console.log("this.state.cityId",this.state.cityId)
 
-               :null}
 
+               :null}
           </div>
         </div>
 
@@ -284,8 +221,6 @@ difindCityId(id){
           </div>
         </div>
         :null}
-      </div>
-      </MuiThemeProvider>
       </div>
     )
   }
