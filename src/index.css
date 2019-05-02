@@ -1,10 +1,10 @@
-/* 
+/*
 
 Our global CSS for the entire project. Use this file if multiple components
 require the same css. Separate each global variable by component.
 
 Note: The background for the app is white. We'll change
-that later. 
+that later.
 
 */
 
@@ -12,14 +12,28 @@ body {
     margin: 0;
     padding: 0;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    background-color: #838282;
+    background-color: rgba(27, 24, 43, 0.959);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
+
   p {
     color: white;
   }
+
   .error {
     border: 1px solid red;
   }
+
+  .flex_Container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .flex_Container > div {
+    margin: 10px;
+    padding: 20px;
+  }
+
+

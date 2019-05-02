@@ -22,9 +22,9 @@ export default class NavbarComponent extends Component {
     render() {
         return (
             
-                //<AppBar position="static" color="default">
-                //    <Toolbar>
-                <nav>
+                <AppBar position="static" color="default">
+                    <Toolbar>
+                
                 <NavLink to="/login" activeClassName={style["active"]}>
                             <div className={style["navbuttons"]}>
                                 <Button color="primary" size="large" >Login</Button>
@@ -35,8 +35,9 @@ export default class NavbarComponent extends Component {
                                 <Button color="primary" size="large" >Dashboard</Button>
                             </div>
                         </NavLink>
-                
-                </nav>
+                    </Toolbar>
+                </AppBar>
+            
         )
     }
 }
