@@ -29,10 +29,6 @@ import SearchCityWeatherComponent from '../components/SearchCityWeatherComponent
 import Select from 'react-select';
 
 class DashboardComponent extends Component {
-<<<<<<< HEAD
-
-=======
->>>>>>> cce94e8680a7ca2030041e446263803f84508fb1
 
   // static propTypes = {
   //   getWeather: PropTypes.func.isRequired// The function getWeather is required .
@@ -121,30 +117,6 @@ return the cityId which will use sedan to get weatherData from API */
     this.setState({searchLocaction:searchCityInput});
     this.searchCity(searchCityInput);
 
-<<<<<<< HEAD
-/*A method that calls the function (getWeather()) and (getLocation()) which they are props received from withHttp component. */
-  componentDidMount(){
-    this.props.getWeather()
-      .then(response =>
-            // console.log(response.data)
-        this.setState({
-          weatherData:response.data,
-          isLoading: true
-        })
-      )
-       .catch(error => this.setState({ error, isLoading: false }));
-
-    this.props.getLocation()
-    .then(response =>
-            // console.log(response.data)
-      this.setState({
-        locationData:response.data
-      })
-    );
-
-   }
-=======
->>>>>>> cce94e8680a7ca2030041e446263803f84508fb1
 
   }
 
@@ -204,11 +176,6 @@ difindCityId(id){
             <div>{list[0].dt_txt}</div>
           </div>
 
-<<<<<<< HEAD
-        <div>
-
-=======
->>>>>>> cce94e8680a7ca2030041e446263803f84508fb1
           {/*Show weather icon.*/}
             <div className="icon whatevs">
               < Markup content={this.getIconDiv(list[0].weather[0].icon)}/>
