@@ -1,15 +1,17 @@
 import Card from '@material-ui/core/Card';
-import style from '../styles/Card.module.css'
+import style from '../styles/Card.module.css';
 import '../icons/weather.css';
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 
 import { userInfo } from 'os';
 
 import withStorage from './../services/withStorage';
-import DashboardScreen from '../screens/DashboardScreen';
+import DashboardScreen from './../screens/DashboardScreen';
+import ErrorScreen from './../screens/ErrorScreen';
+import DashboardComponent from './DashboardComponent';
 
 //validates registration form 
 function validateForm(name, username, password, location, temperature) {
@@ -52,6 +54,8 @@ class UserComponent extends Component {
             passwordLogin: "",
 
             userData: [],
+
+            error: false,
         };
 
     }
@@ -138,6 +142,7 @@ class UserComponent extends Component {
         .catch(function (error) {
             console.log("Error:", error.response);
         });
+        this.props.history.push('/dashboard'); 
     }
 
     //updates the usernameLogin state to the value the user inputed in the login form
@@ -158,12 +163,15 @@ class UserComponent extends Component {
         ); 
     }
 
-    //checks if user is registered by comparing username & password to API, updates userStatus and sets localStorage to username (withStorage)
+    //checks if user is registered by comparing username & password to API, updates error, userStatus and sets localStorage to username (withStorage)
     loginUser = (event) => {   
-        let compareUser = this.state.userData.filter(user => (user.username === this.state.usernameLogin && user.email === this.state.passwordLogin) ?
+        this.state.userData.filter(user => (user.username === this.state.usernameLogin && user.email === this.state.passwordLogin) ?
             (this.props.login('user', user.username),
-            this.setState({ userStatus: "online" }))
-            : console.log("incorrect username or password")
+            this.setState({ userStatus: "online" }),
+            this.setState({ showRegister: false }),
+            this.props.history.push('/dashboard')) 
+            : 
+            (this.setState({ error: true }))
         );
         event.preventDefault();
     }
@@ -202,7 +210,7 @@ class UserComponent extends Component {
                         <input type="text" placeholder="password" 
                         value={this.state.passwordLogin}
                         onChange={this.handlePasswordLoginChange}/><br/>
-                        
+                        <ErrorScreen errorMessage={this.state.error}/>
                         <button>Login</button>
                     </form>
 

@@ -14,7 +14,7 @@ export default class LoginScreen extends Component {
 
     render() {
         return (
-            <UserComponent/>
+            <UserComponent history={this.props.history}/>
         )
     }
 }

@@ -21,30 +21,22 @@ import LoginScreen from '../screens/LoginScreen';
 export default class NavbarComponent extends Component {
     render() {
         return (
-            <Router>
-                <AppBar position="static" color="default">
-                    <Toolbar>
-                        <NavLink to="/login" activeClassName={style["active"]}>
+            
+                //<AppBar position="static" color="default">
+                //    <Toolbar>
+                <nav>
+                <NavLink to="/login" activeClassName={style["active"]}>
                             <div className={style["navbuttons"]}>
-                                <Button color="primary" size="large" type="submit" value="Submit">Login</Button>
+                                <Button color="primary" size="large" >Login</Button>
                             </div>
                         </NavLink>
                         <NavLink to="/dashboard" activeClassName={style["active"]}>
                             <div className={style["navbuttons"]}>
-                                <Button color="primary" size="large" type="submit" value="Submit">Dashboard</Button>
+                                <Button color="primary" size="large" >Dashboard</Button>
                             </div>
                         </NavLink>
-                    </Toolbar>
-                </AppBar>
-
-                <Switch>
-                    <Route exact path="/" component={LoginScreen} />
-                    <Route exact path="/dashboard" component={DashboardScreen} />
-                    <Route path="/login" component={LoginScreen} />
-                </Switch>
-            </Router>
-   
-
+                
+                </nav>
         )
     }
 }

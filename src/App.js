@@ -2,7 +2,7 @@
 // we can change later to suit our app.
 
 // Router and core functionality from react.
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import React, { Component } from 'react'
 
 // Existing component imports.
@@ -21,9 +21,15 @@ class App extends Component {
   render() {
     return (
       <div>
-        <NavbarComponent />
+        <BrowserRouter>
+          <NavbarComponent/>
+          <Route path='/' exact component={LoginScreen} />
+          <Route path='/login' component={LoginScreen} /> 
+          <Route path='/dashboard' exact component={DashboardScreen} />     
+        </BrowserRouter>
       </div>
-    )};
+    );
+  }
 }
 
 export default App;
