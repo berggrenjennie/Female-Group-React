@@ -17,6 +17,3 @@ export default class ErrorScreen extends Component {
         }
 }
 }
-
-
-

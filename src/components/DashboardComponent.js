@@ -3,7 +3,7 @@
 // Router and core functionality from react.
 
 // Existing component imports.
-
+import UserComponent from './UserComponent';
 
 // The main functionality of our app. This is where the weather/date is displayed.
 // See "Screen 2 - The Weather" and "Screen 2 - The Weather (City)" in the
