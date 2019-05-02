@@ -6,8 +6,43 @@ of the icons.
 */
 
 body {
-    color: #e6be3b;
+    /* Change Color below to transparent */
+    color: rgb(88, 85, 88);
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(30,20,31,1) 56%,rgba(54,33,40,1) 76%,rgba(113,68,62,1) 95%,rgba(139,88,73,1) 100%);
+  padding: 30px;
+  box-sizing: border-box;
+  
+}
+
+.threeday {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(139,88,73,1) 0%,rgba(196,143,106,1) 48%,rgba(139,88,73,1) 100%);
+  padding: 30px;
+  box-sizing: border-box;
+
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+
+.threeday:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+
+.date_container {
+    display: flex;
+    justify-content: center;
+    flex-flow: row;
+  }
