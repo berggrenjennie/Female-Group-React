@@ -25,7 +25,10 @@ class App extends Component {
           <NavbarComponent/>
           <Route path='/' exact component={LoginScreen} />
           <Route path='/login' component={LoginScreen} /> 
-          <Route path='/dashboard' exact component={DashboardScreen} />     
+          <Route path='/dashboard' exact component={DashboardScreen} />  
+
+          
+
         </BrowserRouter>
       </div>
     );
