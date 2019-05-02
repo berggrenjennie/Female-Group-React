@@ -14,7 +14,7 @@ export default class DashboardScreen extends Component {
     
   render() {
     return (
-      <DashboardComponent/>
+      <div>Work</div>
     )
   }
 }

@@ -7,14 +7,13 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
 // Router and core functionality from react.
-import { NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Route, NavLink, Switch, Redirect } from "react-router-dom";
 import React, { Component } from 'react'
 
 
 // Existing component imports.
 import DashboardScreen from '../screens/DashboardScreen';
 import LoginScreen from '../screens/LoginScreen';
-import AccountScreen from '../screens/AccountScreen';
 
 // Handles all functionality for the Navbar and routing, including Navlinks,
 // Switch, Routes, and Redirect from /user to /login.
@@ -22,34 +21,23 @@ import AccountScreen from '../screens/AccountScreen';
 export default class NavbarComponent extends Component {
     render() {
         return (
-            <Router>
+            
                 <AppBar position="static" color="default">
                     <Toolbar>
-                        <NavLink to="/login" activeClassName={style["active"]}>
+                
+                <NavLink to="/login" activeClassName={style["active"]}>
                             <div className={style["navbuttons"]}>
-                                <Button color="primary" size="large" type="submit" value="Submit">Login</Button>
+                                <Button color="primary" size="large" >Login</Button>
                             </div>
                         </NavLink>
                         <NavLink to="/dashboard" activeClassName={style["active"]}>
                             <div className={style["navbuttons"]}>
-                                <Button color="primary" size="large" type="submit" value="Submit">Dashboard</Button>
+                                <Button color="primary" size="large" >Dashboard</Button>
                             </div>
-                        </NavLink>
-                        <NavLink to="/account" activeClassName={style["active"]}>
-                            <img src="https://www.datamaticsinc.com/wp-content/uploads/2015/09/silhou.png" alt="profile" style={{height: "80px"}}/>
                         </NavLink>
                     </Toolbar>
                 </AppBar>
-
-                <Switch>
-                    <Route exact path="/" component={LoginScreen} />
-                    <Route exact path="/dashboard" component={DashboardScreen} />
-                    <Route path="/login" component={LoginScreen} />
-                    <Route path="/account" component={AccountScreen} />
-                </Switch>
-            </Router>
-   
-
+            
         )
     }
 }

@@ -16,12 +16,13 @@ export default function withHttp (WrappedComponent, selectData) {
 
     }
 
-    getWeather() {
-      // const {
-      //   tempUnit
-      // }=this.props.tempUnit;
+    getWeather(units, id) {
+      console.log("units:",units);
+      console.log("id:",id);
+      console.log("https://api.openweathermap.org/data/2.5/forecast?id=" + id + "&appid=128a9b3170fb955577e4ba89b87b5ed9&units=" + units);
       return (
-        axios.get("https://api.openweathermap.org/data/2.5/forecast?id=14256&appid=128a9b3170fb955577e4ba89b87b5ed9&units=metric")
+           // axios.get("https://api.openweathermap.org/data/2.5/forecast?id=89824&appid=128a9b3170fb955577e4ba89b87b5ed9&units=metric")
+         axios.get("https://api.openweathermap.org/data/2.5/forecast?id=" + id + "&appid=128a9b3170fb955577e4ba89b87b5ed9&units=" + units)
       )
     }
 
@@ -31,12 +32,20 @@ export default function withHttp (WrappedComponent, selectData) {
       )
     }
 
+    getIcon() {
+      return (
+        // axios.get("http://localhost:3000/icons.list.json?id="+iconId)
+        axios.get("http://localhost:3000/icons.list.json")
+      )
+    }
+
     render() {
     /*we pass through WrappedComponent a method fetchUsers and userList as props*/
       return (
         <WrappedComponent
           getWeather={this.getWeather}
           getLocation={this.getLocation}
+          getIcon={this.getIcon}
           {...this.props}
         />
         )

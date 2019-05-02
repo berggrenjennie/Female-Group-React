@@ -1,12 +1,9 @@
 // CSS and Material Design Imports
-import '../icons/weather.css';
-import style from '../styles/Dashboard.module.css';
 
 // Router and core functionality from react.
-import React, { Component } from 'react'
 
 // Existing component imports.
-
+import UserComponent from './UserComponent';
 
 // The main functionality of our app. This is where the weather/date is displayed.
 // See "Screen 2 - The Weather" and "Screen 2 - The Weather (City)" in the
@@ -15,31 +12,31 @@ import React, { Component } from 'react'
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-
+import axios from 'axios';
 // CSS and Material Design Imports
 import '../icons/weather.css';
 import style from '../styles/Dashboard.module.css';
-import Typography from '@material-ui/core/Typography';
-
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
+// import Select from 'react-select';
 // Use HOC withHttp for weather fetch.
 import withHttp from './../services/withHttp';
+/* Interweave is a phenomenal library that is safe to toconvert a string text to HTML and
+insert it to the DOM. We use it when we chang the icon.*/
+import {Markup} from 'interweave';
+import SearchCityWeatherComponent from '../components/SearchCityWeatherComponent';
+// import DashboardScreen from './../screens/DashboardScreen';
+// import DashboardComponent from './../components/DashboardComponent';
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#9e9e9e',
-    }
-  }
-})
+import Select from 'react-select';
 
 class DashboardComponent extends Component {
+<<<<<<< HEAD
 
+=======
+>>>>>>> cce94e8680a7ca2030041e446263803f84508fb1
 
-  static propTypes = {
-    getWeather: PropTypes.func.isRequired// The function getWeather is required .
-  }
+  // static propTypes = {
+  //   getWeather: PropTypes.func.isRequired// The function getWeather is required .
+  // }
 
 
   constructor(props) {
@@ -47,15 +44,46 @@ class DashboardComponent extends Component {
       this.state ={
         searchLocaction: '',
         locationData:[],
-        cityId:'',
+        cityId:0,
+        iconData:[],
+        iconDiv:"",
         weatherData: [],
         isLoading: true,
         errors: null,
-        showThreeDays: false,
         tempUnit:"C",
         };
       this.handlesearchLocaction = this.handlesearchLocaction.bind(this);
     }
+
+  /*A method that calls the function (getWeather()) and (getLocation()) which they are props received from withHttp component. */
+
+    componentDidMount(){
+      this.props.getWeather('metric',this.difindCityId(this.state.CityId))
+        .then(response =>
+              // console.log(response.data)
+          this.setState({
+            weatherData:response.data,
+            isLoading: true
+          })
+        )
+       .catch(error => this.setState({ error, isLoading: false }));
+
+        this.props.getLocation()
+        .then(response =>
+                // console.log(response.data)
+          this.setState({
+            locationData:response.data
+          })
+        );
+
+        this.props.getIcon()
+        .then(response =>
+                 // console.log("icon:",response.data)
+          this.setState({
+            iconData:response.data
+          })
+         );
+       }
 
 
 /* A method that makes filter to locationData array (which have the data of all cities). In this filter we make compare
@@ -70,20 +98,30 @@ return the cityId which will use sedan to get weatherData from API */
           }
       })
 
-      if(cityId.length!="0")
-        this.setState({cityId: cityId[0].city.id.$numberLong});
+      if(cityId.length > 0){
+
+        this.setState({cityId:Number(cityId[0].city.id.$numberLong)},
+        () => {
+          this.props.getWeather('metric',this.state.cityId)
+            .then(response => {
+              this.setState({
+                weatherData:response.data,
+                isLoading: true
+              })
+            })
+            .catch(error => this.setState({ error, isLoading: false }));
+         }
+      );
+    }
   }
-
-
 
 /* A method that controls and changes the value of the seach field in the form by using setState */
   handlesearchLocaction(event) {
     let searchCityInput= event.target.value;
-    this.setState({searchLocaction:searchCityInput})
-    this.searchCity(searchCityInput)
-  }
+    this.setState({searchLocaction:searchCityInput});
+    this.searchCity(searchCityInput);
 
-
+<<<<<<< HEAD
 /*A method that calls the function (getWeather()) and (getLocation()) which they are props received from withHttp component. */
   componentDidMount(){
     this.props.getWeather()
@@ -105,15 +143,33 @@ return the cityId which will use sedan to get weatherData from API */
     );
 
    }
+=======
+>>>>>>> cce94e8680a7ca2030041e446263803f84508fb1
 
-
-/* A method to change the state (showThreeDays) from false till true or vice versa by using setState.*/
-  toggleThreeDays = (e) => {
-    this.setState({
-      showThreeDays: !this.state.showThreeDays
-    })
   }
 
+difindCityId(id){
+  let city_Id=0;
+  if(id)
+  {
+    return city_Id=id;
+  }
+    return city_Id=2673730;
+}
+
+  /* A method that uses to determine the icon which shows the weather condition .*/
+  getIconDiv(icon_Id){
+      const icon_ID = this.state.iconData.filter(function(icon){
+      if(icon.id===icon_Id)
+          {
+            return icon.iconDiv;
+          }
+          return null;
+      })
+
+      let iconDiv=icon_ID[0].iconDiv;
+        return iconDiv;
+    }
 
 /* A method that uses to determine the name of the day.*/
   getDateName(date){
@@ -122,7 +178,6 @@ return the cityId which will use sedan to get weatherData from API */
       let dayName=  weekday[day.getDay()];
       return dayName;
   }
-
 
   render(){
 
@@ -138,97 +193,71 @@ return the cityId which will use sedan to get weatherData from API */
     return (
 
       <div>
-        <MuiThemeProvider theme={theme}>
-        <div className={style["card"]}>
+
         {/*Show username.*/}
-        <Typography variant="h5" color="primary" align="center" gutterBottom>
-          Hello, Jennie!
-        </Typography>
+        <p>Hello Jennie(username)!</p>
 
+        {list?
+        <div className="flex_Container">
+          {/*Show Current Day.*/}
+          <div>{this.getDateName(list[0].dt_txt)}
+            <div>{list[0].dt_txt}</div>
+          </div>
 
+<<<<<<< HEAD
         <div>
 
+=======
+>>>>>>> cce94e8680a7ca2030041e446263803f84508fb1
           {/*Show weather icon.*/}
             <div className="icon whatevs">
-              {list? list[0].weather[0].main:null}
-              <br/>
-              {list? list[0].weather[0].description:null}
-              <br/>
-              {list?list[0].weather[0].icon:null}
-              <br/>
-              <div className="sun">
-                <div className="rays"></div>
-              </div>
-          </div>
-          {/*Show Current Day.*/}
-          <div className={style["date_container"]}>
-            <div>{list? this.getDateName(list[0].dt_txt):null}
-             <div>{list? list[0].dt_txt:null}</div>
-            </div>
-            <div>
-              {/*Show Current tempretur and it's unit.*/}
-              <p>{list? list[0].main.temp+" "+tempUnit:null}</p>
-            </div>
+              < Markup content={this.getIconDiv(list[0].weather[0].icon)}/>
           </div>
         </div>
+        :null}
+
+        {/*Show Current tempretur and it's unit.*/}
+        <p>{list? list[0].main.temp+" "+tempUnit:null}</p>
 
         {/*Show Location.*/}
         <p>{weatherData.city? "City : "+weatherData.city.name:null}</p>
-
 
         <div>
         {/*Show seach fild.*/}
           <form >
               <input type="text" placeholder="search" value={this.state.searchLocaction} onChange={this.handlesearchLocaction}/>
           </form>
+           < SearchCityWeatherComponent/>
           <div>
             {this.state.cityId?
-              console.log("cityId:",this.state.cityId)
-            :null}
+                console.log("this.state.cityId",this.state.cityId)
+
+
+               :null}
           </div>
         </div>
-      </div>
 
-        {/*Show Wind Speed,Humidity and sunrise or sunset for the current day.*/}
-        <div className={style["threeday"]}>
-        {!this.state.showThreeDays?
-        <div className="flex_Container">
-          <div>Wind Speed
-            <div>{list? list[0].wind.speed:null}</div>
-          </div>
-          <div>Humidity
-            <div>{list? list[0].main.humidity+" % ":null}</div>
-          </div>
-          <div>sun.rise/sun.set</div>
-        </div>
-        :null}
-
-
-        {this.state.showThreeDays?
+          {/*Show three days.*/}
+          {list?
         <div className="flex_Container">
           {/*Show First Day and it's tempretur.*/}
-          <div>{list? this.getDateName(list[5].dt_txt):null}
-            <div>{list? list[5].dt_txt:null}</div>
-            <div>{list? "Temperature : "+list[5].main.temp+" "+tempUnit:null}</div>
+          <div>{this.getDateName(list[5].dt_txt)}
+            <div>{list[5].main.temp+" "+tempUnit}</div>
           </div>
           {/*Show Second Day and it's tempretur.*/}
-          <div>{list? this.getDateName(list[15].dt_txt):null}
-            <div>{list? list[15].dt_txt:null}</div>
-            <div>{list? "Temperature : "+list[15].main.temp+" "+tempUnit:null}</div>
+          <div>{this.getDateName(list[15].dt_txt)}
+            <div>{list[15].main.temp+" "+tempUnit}</div>
           </div>
           {/*Show Third Day and it's tempretur.*/}
-          <div>{list? this.getDateName(list[25].dt_txt):null}
-            <div>{list? list[25].dt_txt:null}</div>
-            <div>{list? "Temperature : "+list[25].main.temp+" "+tempUnit:null}</div>
+          <div>{this.getDateName(list[25].dt_txt)}
+            <div>{list[25].main.temp+" "+tempUnit}</div>
           </div>
         </div>
         :null}
-          <button type="button" onClick={this.toggleThreeDays}>Show three days!</button>
-      </div>
-      </MuiThemeProvider>
       </div>
     )
   }
 }
+
 
 export default withHttp(DashboardComponent);

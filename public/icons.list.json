@@ -1,0 +1,69 @@
+﻿[
+  {
+"id":"01d",
+"iconDiv":"<div class='icon sunny'>\n    <div class='sun'>\n        <div class='rays'></div>\n    </div>\n</div>"
+},
+{
+"id":"01n",
+"iconDiv":"<div class='icon sunny'><div class='sun'> </div></div>"
+},
+{
+"id":"02d",
+"iconDiv":"<div class='icon sun-clouds'>\n    <div class='cloud'></div>\n    <div class='sun'>\n        <div class='rays'></div>\n    </div>\n</div>"
+},
+{
+"id":"02d",
+"iconDiv":"<div class='icon moon-clouds'>\n <div class='cloud'></div>\n      <div class='sun'>\n      </div>\n  </div>"
+},
+{
+"id":"02n",
+"iconDiv":"<div class='icon moon-clouds'>\n    <div class='cloud'></div>\n    <div class='sun'>\n    </div>\n</div>"
+},
+{
+"id":"03d",
+"iconDiv":"<div class='icon cloudy'>\n      <div class='cloud'></div>\n  </div>"
+},
+{
+"id":"03n",
+"iconDiv":"<div class='icon cloudy'>\n    <div class='cloud'></div>\n</div>"
+},
+{
+"id":"04d",
+"iconDiv":"<div class='icon cloudy'>\n      <div class='cloud'></div>\n     <div class='cloud'></div>\n  </div>"
+},
+{
+"id":"04n",
+"iconDiv":"<div class='icon cloudy'>\n    <div class='cloud'></div>\n    <div class='cloud'></div>\n</div>"},
+{"id":"09d",
+"iconDiv":"<div class='icon rainy'>\n    <div class='cloud'></div>\n    <div class='cloud'></div>\n    <div class='rain'></div>\n</div>"
+},
+{
+"id":"09n",
+"iconDiv":"<div class='icon rainy'>\n    <div class='cloud'></div>\n    <div class='cloud'></div>\n    <div class='rain'></div>\n</div>"
+  
+},
+{
+  "id":"10d",
+  "iconDiv":"<div class='icon sun-shower'>\n <div class='cloud'></div>\n    <div class='sun'>\n <div class='rays'></div>\n    </div>\n    <div class='rain'></div>\n</div>"
+  
+},{
+  "id":"10n",
+  "iconDiv":"<div class='icon sun-shower'>\n   <div class='cloud'></div>\n    <div class='sun'>\n    </div>\n    <div class='rain'></div>\n</div>"
+  
+},
+{
+  "id":"11d",
+  "iconDiv":"<div class='icon thunder-storm'>\n<div class='cloud'></div>\n    <div class='cloud'></div>\n    <div class='lightning'>\n        <div class='bolt'></div>\n        <div class='bolt'></div>\n    </div>\n</div>"
+  
+},
+{"id":"11n",
+"iconDiv":"<div class='icon thunder-storm'>\n <div class='cloud'></div>\n    <div class='cloud'></div>\n    <div class='lightning'>\n        <div class='bolt'></div>\n        <div class='bolt'></div>\n    </div>\n</div>"
+  
+},
+{"id":"13d",
+"iconDiv":"<div class='icon flurries'>\n    <div class='cloud'></div>\n    <div class='cloud'></div>\n    <div class='snow'>\n        <div class='flake'></div>\n        <div class='flake'></div>\n    </div>\n</div>"
+  
+},
+{"id":"13n",
+"iconDiv":"<div class='icon flurries'>\n    <div class='cloud'></div>\n    <div class='cloud'></div>\n    <div class='snow'>\n        <div class='flake'></div>\n        <div class='flake'></div>\n    </div>\n</div>"
+}]
