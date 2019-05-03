@@ -4,14 +4,17 @@ import '../icons/weather.css';
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 
 import { userInfo } from 'os';
 
 import withStorage from './../services/withStorage';
 import DashboardScreen from './../screens/DashboardScreen';
+import LoginScreen from './../screens/LoginScreen';
 import ErrorScreen from './../screens/ErrorScreen';
 import DashboardComponent from './DashboardComponent';
+import Tab from '@material-ui/core/Tab/Tab';
+
 
 //validates registration form 
 function validateForm(name, username, password, location, temperature) {
@@ -32,12 +35,15 @@ class UserComponent extends Component {
         this.state = {
             showRegister: false, 
     
+            //these get in userInformation in registration
             name: "",
             username: "",
             password: "",
             location: "",
             temperature: "",
+            userStatus: "offline",
 
+            //validation
             touched: {
                 name: false,
                 username: false,
@@ -46,15 +52,17 @@ class UserComponent extends Component {
                 temperature: false,
             },
 
+            //contains info from registration
             userInformation: [],
-            
-            userStatus: "offline",
-
+        
+            //used to compare userincormation.username &usernameLogin etc.
             usernameLogin: "",
             passwordLogin: "",
 
+            //softhouse user data
             userData: [],
 
+            //errormessage
             error: false,
         };
 
@@ -97,19 +105,25 @@ class UserComponent extends Component {
         });
     };
 
+    //this state is needed to update userStatus
+    updateStatus = () => {
+        this.setState({ userStatus: "online" }); //if I dont put it here it wont update the state
+    }
+
     //registers the user by updating the userInformation and the userStatus state 
     onRegistration = (event) => {
         event.preventDefault();
-
+    
         const registerUser = this.state.userInformation.concat([{
             name: this.state.name, 
             username: this.state.username, 
             password: this.state.password, 
             location: this.state.location, 
-            temperature: this.state.temperature
+            temperature: this.state.temperature,
+            userStatus: this.state.userStatus
         }]);    
-        this.setState({ userInformation: registerUser });
-        this.setState({ userStatus: "online" });
+        
+        this.setState({ userInformation: registerUser });   
         localStorage.setItem("user", this.state.username);
 
         const axiosConfig = {
@@ -125,7 +139,7 @@ class UserComponent extends Component {
             email: this.state.password,
             address: {
                 street: 'mock street 12',
-                suite: 'mock suite',
+                suite: this.state.userStatus, //changed to online
                 city: this.state.location,
                 zipcode: this.state.temperature,
                 geo: {
@@ -142,7 +156,7 @@ class UserComponent extends Component {
         .catch(function (error) {
             console.log("Error:", error.response);
         });
-        this.props.history.push('/dashboard'); 
+        this.props.history.push('/dashboard');
     }
 
     //updates the usernameLogin state to the value the user inputed in the login form
@@ -168,10 +182,10 @@ class UserComponent extends Component {
         this.state.userData.filter(user => (user.username === this.state.usernameLogin && user.email === this.state.passwordLogin) ?
             (this.props.login('user', user.username),
             this.setState({ userStatus: "online" }),
-            this.setState({ showRegister: false }),
-            this.props.history.push('/dashboard')) 
+            this.props.history.push('/dashboard'))
             : 
-            (this.setState({ error: true }))
+            (this.setState({ error: true }),
+            console.log(this.state.userStatus))
         );
         event.preventDefault();
     }
@@ -179,11 +193,12 @@ class UserComponent extends Component {
     //updates the userStatus state and clears username from localStorage if checkStatus is true (withStorage)
     logoutUser = (event) => {
         if (this.props.checkStatus) {
-            this.setState({userStatus: "offline"});
+            this.setState({ userStatus: "offline" });
             this.props.logout();
+            this.props.history.push('/login');
         }
     }
-
+    
     render() {           
 
         //sends user's inputs from registration to validation 
@@ -210,10 +225,14 @@ class UserComponent extends Component {
                         <input type="text" placeholder="password" 
                         value={this.state.passwordLogin}
                         onChange={this.handlePasswordLoginChange}/><br/>
-                        <ErrorScreen errorMessage={this.state.error}/>
+
+                        {this.state.error ?
+                        <ErrorScreen errorMessage={this.state.error}/>: null
+                    } 
                         <button>Login</button>
                     </form>
 
+                      
                     <button onClick={this.logoutUser}>Logout</button><br/><br/>
                     <button onClick={this.showForm} style={{ backgroundColor: this.state.showRegister ? "#0066cc" : "#808080" }}>Don't have an account? Click here!</button><br/><br/>
                 </div>
@@ -250,11 +269,10 @@ class UserComponent extends Component {
                                 <option value="F">Fahrenheit</option>
                             </select><br/>
     
-                            <button disabled={isDisabled}>Register</button> 
-                            <p>{this.state.userStatus}</p>
+                            <button disabled={isDisabled} onClick={this.updateStatus}>Register</button> 
                         </form>
                     </div> :null
-                } 
+                }
             </Card>
         )
     } 
