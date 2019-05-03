@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import Select from 'react-select';
 import withHttp from './../services/withHttp';
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' }
-];
+// const options = [
+//   { value: 'chocolate', label: 'Chocolate' },
+//   { value: 'strawberry', label: 'Strawberry' },
+//   { value: 'vanilla', label: 'Vanilla' }
+// ];
 
 const cityList=[{value:"14256",label:"Azadshahr.IR"}];
 

@@ -3,7 +3,7 @@
 // Router and core functionality from react.
 
 // Existing component imports.
-import UserComponent from './UserComponent';
+
 
 // The main functionality of our app. This is where the weather/date is displayed.
 // See "Screen 2 - The Weather" and "Screen 2 - The Weather (City)" in the
@@ -11,28 +11,23 @@ import UserComponent from './UserComponent';
 // Grabs user info directly from local storage.
 
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
-import axios from 'axios';
+
 // CSS and Material Design Imports
 import '../icons/weather.css';
 import style from '../styles/Dashboard.module.css';
 import LocationOn from '@material-ui/icons/LocationOn';
-import Input from '@material-ui/core/Input';
+
 import TextField from '@material-ui/core/TextField';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
-// import Select from 'react-select';
+
 // Use HOC withHttp for weather fetch.
 import withHttp from './../services/withHttp';
 /* Interweave is a phenomenal library that is safe to toconvert a string text to HTML and
 insert it to the DOM. We use it when we chang the icon.*/
 import {Markup} from 'interweave';
-import SearchCityWeatherComponent from '../components/SearchCityWeatherComponent';
-// import DashboardScreen from './../screens/DashboardScreen';
-// import DashboardComponent from './../components/DashboardComponent';
 
-import Select from 'react-select';
 
 const theme = createMuiTheme({
   palette: {

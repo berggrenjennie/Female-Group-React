@@ -154,7 +154,7 @@ class AccountComponent extends Component {
 
                 </form>
 
-                {console.log("edit userinfo", this.state.editUserinformation)}
+                {/* {console.log("edit userinfo", this.state.editUserinformation)} */}
               </Fragment>
 
           </Fragment>
