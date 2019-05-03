@@ -16,6 +16,12 @@ import axios from 'axios';
 // CSS and Material Design Imports
 import '../icons/weather.css';
 import style from '../styles/Dashboard.module.css';
+import LocationOn from '@material-ui/icons/LocationOn';
+import Input from '@material-ui/core/Input';
+import TextField from '@material-ui/core/TextField';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+
 // import Select from 'react-select';
 // Use HOC withHttp for weather fetch.
 import withHttp from './../services/withHttp';
@@ -27,6 +33,14 @@ import SearchCityWeatherComponent from '../components/SearchCityWeatherComponent
 // import DashboardComponent from './../components/DashboardComponent';
 
 import Select from 'react-select';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#dfddda',
+    }
+  }
+})
 
 class DashboardComponent extends Component {
 
@@ -47,6 +61,7 @@ class DashboardComponent extends Component {
         isLoading: true,
         errors: null,
         tempUnit:"C",
+        showDiv: false
         };
       this.handlesearchLocaction = this.handlesearchLocaction.bind(this);
     }
@@ -81,6 +96,10 @@ class DashboardComponent extends Component {
          );
        }
 
+
+    toggleDiv = () => {
+      this.setState(state => ({ showDiv: !state.showDiv }));
+      }
 
 /* A method that makes filter to locationData array (which have the data of all cities). In this filter we make compare
 between the searchCityInput(this consists of the name of the city and the country) and evry city's name in the arrary and
@@ -143,11 +162,13 @@ difindCityId(id){
         return iconDiv;
     }
 
-/* A method that uses to determine the name of the day.*/
+/* A method that uses to determine the day. */
   getDateName(date){
+      var options = { weekday: 'long', month: 'long', day: 'numeric' };
+
       let day=new Date(date);
-      let weekday=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-      let dayName=  weekday[day.getDay()];
+      let dayName = day.toLocaleDateString("en-US", options)
+      
       return dayName;
   }
 
@@ -164,60 +185,85 @@ difindCityId(id){
 
     return (
 
-      <div>
+      <div className={style.card}>
 
         {/*Show username.*/}
-        <p>Hello Jennie(username)!</p>
+        <div className={style.center}>
+          <p className={style.golduser}>Hello, Jennie!</p>
+        </div>
 
         {list?
-        <div className="flex_Container">
-          {/*Show Current Day.*/}
-          <div>{this.getDateName(list[0].dt_txt)}
-            <div>{list[0].dt_txt}</div>
-          </div>
-
+        <div className={style.weather_display}>
           {/*Show weather icon.*/}
-            <div className="icon whatevs">
+          <div className="icon" className={style.weather_icon}>
               < Markup content={this.getIconDiv(list[0].weather[0].icon)}/>
+          </div>
+          <div className={style.flex_container}>
+            {/*Show Current Day.*/}
+            <div className={style.silver}>{this.getDateName(list[0].dt_txt)}
+              {/* <div>{list[0].dt_txt}</div> */}
+            </div>
+            <div>
+              {/*Show Current tempretur and it's unit.*/}
+              <p className={style.silver}>{list? list[0].main.temp+" "+tempUnit:null}</p>
+            </div>
           </div>
         </div>
         :null}
 
-        {/*Show Current tempretur and it's unit.*/}
-        <p>{list? list[0].main.temp+" "+tempUnit:null}</p>
-
         {/*Show Location.*/}
-        <p>{weatherData.city? "City : "+weatherData.city.name:null}</p>
-
-        <div>
-        {/*Show seach fild.*/}
-          <form >
-              <input type="text" placeholder="search" value={this.state.searchLocaction} onChange={this.handlesearchLocaction}/>
-          </form>
-           < SearchCityWeatherComponent/>
-          <div>
-            {this.state.cityId?
-                console.log("this.state.cityId",this.state.cityId)
-
-
-               :null}
-          </div>
+        <div className={style.centerCity} onClick={this.toggleDiv}>
+          <p className={style.silvergold}><LocationOn />{weatherData.city? weatherData.city.name:null}</p>
         </div>
+        {/*Show seach fild.*/}
+        {this.state.showDiv && 
+        <div className={style.center}>
+          <MuiThemeProvider theme={theme}>
+            {/* <form >
+                <TextField label="Enter City" variant="outlined" type="text" placeholder="Search" value={this.state.searchLocaction} onChange={this.handlesearchLocaction}/>
+            </form> */}
+            <div className={style.center}>
+              <Grid container alignItems="flex-end">
+                <Grid item>
+                  <form >
+                    <TextField
+                    margin="normal"
+                    style={{ background: "linear-gradient(to bottom, rgba(233, 233, 233, 0.37) 0%,rgba(144, 144, 145, 0.089) 100%)" }}
+                    label="Enter City" 
+                    variant="outlined" 
+                    type="text" 
+                    placeholder="Search" 
+                    value={this.state.searchLocaction} 
+                    onChange={this.handlesearchLocaction} />
+                  </form >
+                </Grid>
+              </Grid>
+            </div>
+            </MuiThemeProvider>
+            <div>
+              {this.state.cityId?
+                  console.log("this.state.cityId",this.state.cityId)
+                :null}
+            </div>
+            </div>
+          }
+        
 
           {/*Show three days.*/}
           {list?
-        <div className="flex_Container">
+        <div className={style.flex_three}>
           {/*Show First Day and it's tempretur.*/}
-          <div>{this.getDateName(list[5].dt_txt)}
-            <div>{list[5].main.temp+" "+tempUnit}</div>
+          
+          <div className={style.silver}>{this.getDateName(list[5].dt_txt)}
+            <div className={style.silver}>{list[5].main.temp+" "+tempUnit}</div>
           </div>
           {/*Show Second Day and it's tempretur.*/}
-          <div>{this.getDateName(list[15].dt_txt)}
-            <div>{list[15].main.temp+" "+tempUnit}</div>
+          <div className={style.silver}>{this.getDateName(list[15].dt_txt)}
+            <div className={style.silver}>{list[15].main.temp+" "+tempUnit}</div>
           </div>
           {/*Show Third Day and it's tempretur.*/}
-          <div>{this.getDateName(list[25].dt_txt)}
-            <div>{list[25].main.temp+" "+tempUnit}</div>
+          <div className={style.silver}>{this.getDateName(list[25].dt_txt)}
+            <div className={style.silver}>{list[25].main.temp+" "+tempUnit}</div>
           </div>
         </div>
         :null}

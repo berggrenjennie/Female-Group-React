@@ -5,23 +5,26 @@ For Weather Icon: Note that body color is defined to set the background
 of the icons.
 */
 
+@import url('https://fonts.googleapis.com/css?family=Crimson+Text:700');
+
 body {
-    /* Change Color below to transparent */
-    color: rgb(88, 85, 88);
+    color: rgb(16, 16, 18);
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'Crimson Text', serif;
 }
 
 .card {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   width: 100%;
-  background: linear-gradient(to bottom, rgba(30,20,31,1) 56%,rgba(54,33,40,1) 76%,rgba(113,68,62,1) 95%,rgba(139,88,73,1) 100%);
+  background: linear-gradient(to bottom, rgba(26,27,28,1) 0%,rgba(55,57,58,1) 100%);
   padding: 30px;
   box-sizing: border-box;
-  
+  background: url('../icons/black-metal-background4.jpg');
 }
+
 
 .threeday {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -46,3 +49,112 @@ body {
     justify-content: center;
     flex-flow: row;
   }
+
+  .center {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+  }
+
+
+  .silver {
+    background: linear-gradient(to bottom, #cfc09f 22%,#666562 24%, #cfc09f 26%, #cfc09f 27%,#dfddda 40%,#36332d 78%); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #fff;
+    font-family: 'Lora', serif;
+    position: relative;
+  	text-transform: uppercase;	
+	  font-size: 20px;
+  	margin: 0;
+    font-weight: 400;
+    padding: 6px;
+  }
+
+  .silvergold {
+    background: linear-gradient(to bottom, #cfc09f 22%,#634f2c 24%, #cfc09f 26%, #cfc09f 27%,#ffecb3 40%,#3a2c0f 78%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #fff;
+    /* font-family: 'Lora', serif; */
+    position: relative;
+  	text-transform: uppercase;	
+	  font-size: 20px;
+  	margin: 0;
+    font-weight: 400;
+    padding: 6px;
+  }
+
+  .golduser {
+    background: linear-gradient(to bottom, #cfc09f 22%,#634f2c 24%, #cfc09f 26%, #cfc09f 27%,#ffecb3 40%,#3a2c0f 78%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #fff;
+    /* font-family: 'Lora', serif; */
+    position: relative;
+  	/* text-transform: uppercase;	 */
+	  font-size: 30px;
+  	margin: 0;
+    font-weight: 400;
+    padding: 6px;
+  }
+
+
+  .silver:after {
+    background: none;
+    content: attr(data-heading);
+    left: 0;
+	  top: 0;
+    z-index: -1;
+    position: absolute;
+    text-shadow: 
+		-1px 0 1px #c6bb9f, 
+		0 1px 1px #c6bb9f, 
+		5px 5px 10px rgba(0, 0, 0, 0.4),
+		-5px -5px 10px rgba(0, 0, 0, 0.4);
+}
+
+.centerCity {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  margin-bottom: .2em;
+}
+
+.weather_display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flex_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex_container > div {
+  padding: 10px;
+}
+
+.flex_three {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 100%;
+  /* background: linear-gradient(to bottom, rgba(233, 233, 233, 0.37) 0%,rgba(144, 144, 145, 0.089) 100%); */
+  background: linear-gradient(to bottom, rgba(54, 56, 58, 0.062) 0%,rgba(55, 57, 58, 0.315) 100%);
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.flex_three > div {
+  margin: 10px;
+  padding: 10px;
+}
+
+.weather_icon {
+  padding-bottom: 20px;
+}

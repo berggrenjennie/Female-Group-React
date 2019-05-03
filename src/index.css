@@ -8,13 +8,14 @@ that later.
 
 */
 
+
 body {
     margin: 0;
     padding: 0;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    background-color: rgba(27, 24, 43, 0.959);
+    background-color: rgb(16, 16, 18);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-image: url('./icons/black-metal-background.jpg')
   }
 
   p {
@@ -24,16 +25,4 @@ body {
   .error {
     border: 1px solid red;
   }
-
-  .flex_Container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .flex_Container > div {
-    margin: 10px;
-    padding: 20px;
-  }
-
 
