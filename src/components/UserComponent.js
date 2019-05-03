@@ -4,16 +4,11 @@ import '../icons/weather.css';
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import { withRouter, Redirect } from 'react-router-dom';
-
-import { userInfo } from 'os';
 
 import withStorage from './../services/withStorage';
-import DashboardScreen from './../screens/DashboardScreen';
-import LoginScreen from './../screens/LoginScreen';
+
 import ErrorScreen from './../screens/ErrorScreen';
-import DashboardComponent from './DashboardComponent';
-import Tab from '@material-ui/core/Tab/Tab';
+
 
 
 //validates registration form 

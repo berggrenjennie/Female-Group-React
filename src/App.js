@@ -1,7 +1,7 @@
 // Imports basic React funtionality. Imports Material UI's default typeface, which
 // we can change later to suit our app.
 // Router and core functionality from react.
-import { BrowserRouter, Router, Route, Link, Redirect, withRouter } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import React, { Component } from 'react'
 // Existing component imports.
 import NavbarComponent from './components/NavbarComponent';

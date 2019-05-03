@@ -8,8 +8,6 @@ import { BrowserRouter as Router, Link } from "react-router-dom";
 import React, { Component } from 'react'
 
 // Existing component imports.
-import DashboardScreen from '../screens/DashboardScreen';
-import LoginScreen from '../screens/LoginScreen';
 
 // stuff for the new weather app
 
@@ -19,7 +17,6 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import grey from '@material-ui/core/colors/grey';
 
 const styles = {
     menuButton: {

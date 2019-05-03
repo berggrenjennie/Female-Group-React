@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import UserComponent from '../components/UserComponent';
 
 export default class ErrorScreen extends Component {
 
