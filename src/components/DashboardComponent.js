@@ -37,6 +37,7 @@ const theme = createMuiTheme({
   }
 })
 
+let iconDiv="";
 class DashboardComponent extends Component {
 
   // static propTypes = {
@@ -125,6 +126,7 @@ return the cityId which will use sedan to get weatherData from API */
     }
   }
 
+
 /* A method that controls and changes the value of the seach field in the form by using setState */
   handlesearchLocaction(event) {
     let searchCityInput= event.target.value;
@@ -134,14 +136,14 @@ return the cityId which will use sedan to get weatherData from API */
 
   }
 
-difindCityId(id){
-  let city_Id=0;
-  if(id)
-  {
-    return city_Id=id;
-  }
+  difindCityId(id){
+    let city_Id=0;
+    if(id)
+      {
+        return city_Id=id;
+      }
     return city_Id=2673730;
-}
+  }
 
   /* A method that uses to determine the icon which shows the weather condition .*/
   getIconDiv(icon_Id){
@@ -150,20 +152,20 @@ difindCityId(id){
           {
             return icon.iconDiv;
           }
-          return null;
       })
 
-      let iconDiv=icon_ID[0].iconDiv;
-        return iconDiv;
+      if(icon_ID.length>0)
+      {
+        iconDiv=icon_ID[0].iconDiv;
+      }
+          return iconDiv;
     }
 
 /* A method that uses to determine the day. */
   getDateName(date){
       var options = { weekday: 'long', month: 'long', day: 'numeric' };
-
       let day=new Date(date);
       let dayName = day.toLocaleDateString("en-US", options)
-      
       return dayName;
   }
 
@@ -175,13 +177,14 @@ difindCityId(id){
 
     const {
         tempUnit,
-        weatherData
+        weatherData,
+        isLoading
           } = this.state;
 
     return (
 
       <div className={style.card}>
-
+      
         {/*Show username.*/}
         <div className={style.center}>
           <p className={style.golduser}>Hello, Jennie!</p>
@@ -191,6 +194,7 @@ difindCityId(id){
         <div className={style.weather_display}>
           {/*Show weather icon.*/}
           <div className="icon" className={style.weather_icon}>
+          {console.log("divicon",list[0].weather[0].icon)}
               < Markup content={this.getIconDiv(list[0].weather[0].icon)}/>
           </div>
           <div className={style.flex_container}>
@@ -211,7 +215,7 @@ difindCityId(id){
           <p className={style.silvergold}><LocationOn />{weatherData.city? weatherData.city.name:null}</p>
         </div>
         {/*Show seach fild.*/}
-        {this.state.showDiv && 
+        {this.state.showDiv &&
         <div className={style.center}>
           <MuiThemeProvider theme={theme}>
             {/* <form >
@@ -224,11 +228,11 @@ difindCityId(id){
                     <TextField
                     margin="normal"
                     style={{ background: "linear-gradient(to bottom, rgba(233, 233, 233, 0.37) 0%,rgba(144, 144, 145, 0.089) 100%)" }}
-                    label="Enter City" 
-                    variant="outlined" 
-                    type="text" 
-                    placeholder="Search" 
-                    value={this.state.searchLocaction} 
+                    label="Enter City"
+                    variant="outlined"
+                    type="text"
+                    placeholder="Search"
+                    value={this.state.searchLocaction}
                     onChange={this.handlesearchLocaction} />
                   </form >
                 </Grid>
@@ -242,13 +246,13 @@ difindCityId(id){
             </div>
             </div>
           }
-        
+
 
           {/*Show three days.*/}
           {list?
         <div className={style.flex_three}>
           {/*Show First Day and it's tempretur.*/}
-          
+
           <div className={style.silver}>{this.getDateName(list[5].dt_txt)}
             <div className={style.silver}>{list[5].main.temp+" "+tempUnit}</div>
           </div>
