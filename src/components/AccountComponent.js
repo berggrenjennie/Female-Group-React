@@ -8,12 +8,13 @@ class AccountComponent extends Component {
       this.state={
 
           userInformation:[{
-            id:"5ccc2b27303a2000209ccf02",
+            id:53,
             name:"Jennie",
             username:"jenber",
             password:"123444",
             location:"Växjö",
-            temperature:"Celcius"
+            temperature:"Celcius",
+            userStatus: "Online"
           }],
           editUserinformation:[],
           userData:[],
@@ -22,7 +23,7 @@ class AccountComponent extends Component {
           editpassword:"",
           editlocation:"",
           edittemperature:"",
-          error:false
+          showeditinfo:false
         };
 
             this.handleeditname = this.handleeditname.bind(this);
@@ -30,7 +31,7 @@ class AccountComponent extends Component {
             this.handleeditpassword = this.handleeditpassword.bind(this);
             this.handleeditlocation = this.handleeditlocation.bind(this);
             this.handleedittemperature = this.handleedittemperature.bind(this);
-              this.editAccount = this.editAccount.bind(this);
+            this.editAccount = this.editAccount.bind(this);
   }
 
   handleeditname(event) {
@@ -58,7 +59,7 @@ class AccountComponent extends Component {
   }
 
 
-  editUserInformation(){
+  editUserInformation(id){
 
     const axiosConfig = {
         headers: {
@@ -67,13 +68,13 @@ class AccountComponent extends Component {
         }
     };
 
-    const newUser = {
+    const editUser = {
         name: this.state.editnamename ,
         username: this.state.editusername,
         email: this.state.editpassword,
         address: {
             street: 'mock street 12',
-            suite: 'mock suite',
+            suite: this.state.userInformation[0].userStatus,
             city: this.state.editlocation,
             zipcode: this.state.edittemperature,
             geo: {
@@ -83,10 +84,10 @@ class AccountComponent extends Component {
         }
     }
 
-    axios.put('http://api.softhouse.rocks/users/', newUser, axiosConfig)
+    axios.put('http://api.softhouse.rocks/users/'+id, editUser)
     .then(function (response) {
         console.log("Success:", response.data);
-    })
+    }.bind(this))
     .catch(function (error) {
         console.log("Error:", error.response);
     });
@@ -101,31 +102,46 @@ class AccountComponent extends Component {
          username:this.state.editusername,
          password:this.state.editpassword,
          location:this.state.editlocation,
-         temperature:this.state.edittemperature
+         temperature:this.state.edittemperature,
+         userStatus:this.state.userInformation[0].userStatus
         }],
+        showeditinfo:true
        })
 
-
-      this.state.userData.filter(user => (user._id === this.state.userInformation[0].id) ?
-        this.editUserInformation()
-        :
-        (this.setState({ error: true }))
-      );
-      }
+        this.editUserInformation(this.state.userInformation[0].id)
+       }
      event.preventDefault();
-  }
+}
     render() {
-        const {userInformation}= this.state;
+        const {
+          userInformation,
+          editUserinformation,
+          showeditinfo
+          }= this.state;
         return (
           <Fragment>
               <div>My Account</div>
               <br/>
-              <div>Name: {userInformation[0].name} </div>
-              <div>Username: {userInformation[0].username} </div>
-              <div>Password: {userInformation[0].password} </div>
-              <div>Location: {userInformation[0].location} </div>
-              <div>Temperature: {userInformation[0].temperature} </div>
-
+              {editUserinformation.length>0 && showeditinfo &&
+              <div style={{ color: "#ffffff" }}>
+                <div>Name: {editUserinformation[0].name} </div>
+                <div>Username: {editUserinformation[0].username} </div>
+                <div>Password: {editUserinformation[0].password} </div>
+                <div>Location: {editUserinformation[0].location} </div>
+                <div>Temperature: {editUserinformation[0].temperature} </div>
+                <div>userStatus: {editUserinformation[0].userStatus} </div>
+               </div>
+             }
+             {!showeditinfo &&
+                 <div style={{ color: "#ffffff" }}>
+                   <div>Name: {userInformation[0].name} </div>
+                   <div>Username: {userInformation[0].username} </div>
+                   <div>Password: {userInformation[0].password} </div>
+                   <div>Location: {userInformation[0].location} </div>
+                   <div>Temperature: {userInformation[0].temperature} </div>
+                   <div>userStatus: {userInformation[0].userStatus} </div>
+                  </div>
+              }
               <Fragment>
                 <button>Edit</button>
 

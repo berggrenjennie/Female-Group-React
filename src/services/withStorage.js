@@ -29,7 +29,7 @@ const withStorage = (WrappedComponent) => {
       )
     }
 
-    getUserId(id) { console.log('http://api.softhouse.rocks/users?_id=' + id)
+    getUserId(id) { console.log('http://api.softhouse.rocks/users/'+ id)
       return (
         axios.get('http://api.softhouse.rocks/users/' + id)
       )
