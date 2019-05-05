@@ -3,9 +3,15 @@
 .icon {
     position: relative;
     display: inline-block;
-    width: 14em;
-    height: 8em;
+    width: 10.5em;
+    height: 9em;
     font-size: 1.1em; /* control icon size here */
+  }
+
+  .center {
+    position: absolute;
+    left: 15%; 
+
   }
   
   .cloud {
@@ -107,7 +113,7 @@
     width: 3.75em;
     height: 3.75em;
     margin: 0.375em 0 0 -2em;
-    background: currentColor;
+    background: transparent;
   }
   
   .rain:after {

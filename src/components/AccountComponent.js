@@ -1,181 +1,190 @@
-import React, { Component, Fragment } from 'react'
+// CSS and Material Design Imports
+import style from '../styles/Account.module.css';
+import '../icons/weather.css';
+import TextField from '@material-ui/core/TextField';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Select from '@material-ui/core/Select';
+
+// Core functionality from react and axios.
+import React, { Component } from 'react';
 import axios from 'axios';
 import withStorage from './../services/withStorage';
+import { withRouter } from 'react-router-dom';
+import PropTypes from "prop-types";
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#1d1e20'
+    }
+  }
+});
+
+// This component handles everything for the Edit Account screen.
+// The fields populate from the data it gets from Softhouse API, where
+// the user can then easily edit it and confirm the changes.
+// After confirming, the user is redirection to the DashboardScreen.
 
 class AccountComponent extends Component {
-  constructor(props){
+  static propTypes = {
+    history: PropTypes.object,
+    match: PropTypes.object,
+    location: PropTypes.object,
+    getUser: PropTypes.func,
+    getUserId: PropTypes.func,
+    addUser: PropTypes.func
+  };
+
+  // User state with empty values used for editing and saving user
+  // account information.
+  constructor(props) {
     super(props);
-      this.state={
-
-          userInformation:[{
-            id:53,
-            name:"Jennie",
-            username:"jenber",
-            password:"123444",
-            location:"Växjö",
-            temperature:"Celcius",
-            userStatus: "Online"
-          }],
-          editUserinformation:[],
-          userData:[],
-          editname:"",
-          editusername:"",
-          editpassword:"",
-          editlocation:"",
-          edittemperature:"",
-          showeditinfo:false
-        };
-
-            this.handleeditname = this.handleeditname.bind(this);
-            this.handleeditusername = this.handleeditusername.bind(this);
-            this.handleeditpassword = this.handleeditpassword.bind(this);
-            this.handleeditlocation = this.handleeditlocation.bind(this);
-            this.handleedittemperature = this.handleedittemperature.bind(this);
-            this.editAccount = this.editAccount.bind(this);
-  }
-
-  handleeditname(event) {
-    this.setState({editname: event.target.value});
-  }
-  handleeditusername(event) {
-    this.setState({editusername: event.target.value});
-  }
-  handleeditpassword(event) {
-    this.setState({editpassword: event.target.value});
-  }
-  handleeditlocation(event) {
-    this.setState({editlocation: event.target.value});
-  }
-  handleedittemperature(event) {
-    this.setState({edittemperature: event.target.value});
-  }
-
-  //getting user data from Softhouse API though HOC
-  componentDidMount(){
-      this.props.getUserId(this.state.userInformation[0].id)
-      .then(response =>
-          this.setState({ userData: response.data })
-      );
-  }
-
-
-  editUserInformation(id){
-
-    const axiosConfig = {
-        headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
-            "Access-Control-Allow-Origin": "*",
-        }
+    this.state = {
+      id: 0,
+      name: '',
+      username: '',
+      email: '',
+      temperature: ''
     };
+  }
 
-    const editUser = {
-        name: this.state.editnamename ,
-        username: this.state.editusername,
-        email: this.state.editpassword,
-        address: {
-            street: 'mock street 12',
-            suite: this.state.userInformation[0].userStatus,
-            city: this.state.editlocation,
-            zipcode: this.state.edittemperature,
-            geo: {
-                lat: 0,
-                lng: 0
-            }
-        }
+  // One function to handle all the input field data changes, where 'name' is field changed
+  // and event is the incoming data change to that field. This function then sets the appropriate state.
+  handleInputChange = name => event => {
+    const state = {};
+    state[name] = event.target.value;
+    this.setState(state);
+  };
+
+  // Getting user data from Softhouse API though withStorage HOC. 
+  // If a user who is not logged in tries to access this page, the user
+  // is then redirected to login (/). If the user does exist, the information is grabbed
+  // from Softhouse's API and set as the state with the help of setUserInformation.
+  componentDidMount() {
+    const user = this.props.getUser();
+    if (user === null) {
+      this.props.history.push('/');
+      return;
     }
-
-    axios.put('http://api.softhouse.rocks/users/'+id, editUser)
-    .then(function (response) {
-        console.log("Success:", response.data);
-    }.bind(this))
-    .catch(function (error) {
-        console.log("Error:", error.response);
+    this.setUserInformation(user);
+    this.props.getUserId(user.id).then(response => {
+      const data = response.data;
+      this.setUserInformation(data);
     });
   }
 
-  editAccount = (event) => {
-     if( this.state.editname && this.state.editusername && this.state.editpassword && this.state.editlocation && this.state.edittemperature){
-     this.setState({
-       editUserinformation:[{
-         id:this.state.userInformation[0].id,
-         name:this.state.editname,
-         username:this.state.editusername,
-         password:this.state.editpassword,
-         location:this.state.editlocation,
-         temperature:this.state.edittemperature,
-         userStatus:this.state.userInformation[0].userStatus
-        }],
-        showeditinfo:true
-       })
+  // Sets the user's information as the current state.
+  setUserInformation(user) {
+    this.setState({
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      password: user.email,
+      temperature: user.address.zipcode
+    });
+  }
 
-        this.editUserInformation(this.state.userInformation[0].id)
-       }
-     event.preventDefault();
+  // Handles input edits when user clicks the 'confirm changes' button.
+  editAccount = event => {
+    event.preventDefault();
+    const editUser = {
+      name: this.state.name,
+      username: this.state.username,
+      email: this.state.password,
+      address: {
+        street: 'mock street 12',
+        suite: 'online',
+        city: 'Stockholm',
+        zipcode: this.state.temperature,
+        geo: {
+          lat: 0,
+          lng: 0
+        }
+      }
+    };
+
+    // Sends the updated user to Softouse's API, then redirects user to the dashboard.
+    axios
+      .put('http://api.softhouse.rocks/users/' + this.state.id, editUser)
+      .then(response => {
+        this.props.addUser(response.data);
+        this.props.history.push('/dashboard');
+      });
+  };
+
+  render() {
+    const { name, username, temperature } = this.state;
+    return (
+      <div>
+        <div className="icon center flurries">
+          <div className="cloud"></div>
+          <div className="cloud"></div>
+          <div className="snow">
+            <div className="flake"></div>
+            <div className="flake"></div>
+          </div>
+        </div>
+        <div className={style.card}>
+          <div className={style.textaccount}>My Account</div>
+          <hr />
+          <div>
+            <div className={style.textlogin}>Name: {name} </div>
+            <div className={style.textlogin}>Username: {username} </div>
+            <div className={style.textlogin}>Temperature: {temperature} </div>
+          </div>
+          <hr />
+          <form onSubmit={this.editAccount}>
+            <MuiThemeProvider theme={theme}>
+              <TextField
+                margin='normal'
+                label='Name'
+                variant='outlined'
+                type='text'
+                value={name}
+                onChange={this.handleInputChange('name')}
+              />
+              <br />
+
+              <TextField
+                margin='normal'
+                label='Username'
+                variant='outlined'
+                type='text'
+                value={username}
+                onChange={this.handleInputChange('username')}
+              />
+              <br />
+
+              <TextField
+                margin='normal'
+                label='Password'
+                variant='outlined'
+                type='password'
+                placeholder='password'
+                onChange={this.handleInputChange('password')}
+              />
+              <br />
+              <br />
+
+              <Select
+                native
+                value={temperature}
+                onChange={this.handleInputChange('temperature')}
+              >
+
+                <option value='C'>Celcius</option>
+                <option value='F'>Fahrenheit</option>
+              </Select>
+              <br />
+              <br />
+
+
+              <button className={style.btn} type='submit'>Confirm Changes</button>
+            </MuiThemeProvider>
+          </form>
+        </div>
+      </div>
+    );
+  }
 }
-    render() {
-        const {
-          userInformation,
-          editUserinformation,
-          showeditinfo
-          }= this.state;
-        return (
-          <Fragment>
-              <div>My Account</div>
-              <br/>
-              {editUserinformation.length>0 && showeditinfo &&
-              <div style={{ color: "#ffffff" }}>
-                <div>Name: {editUserinformation[0].name} </div>
-                <div>Username: {editUserinformation[0].username} </div>
-                <div>Password: {editUserinformation[0].password} </div>
-                <div>Location: {editUserinformation[0].location} </div>
-                <div>Temperature: {editUserinformation[0].temperature} </div>
-                <div>userStatus: {editUserinformation[0].userStatus} </div>
-               </div>
-             }
-             {!showeditinfo &&
-                 <div style={{ color: "#ffffff" }}>
-                   <div>Name: {userInformation[0].name} </div>
-                   <div>Username: {userInformation[0].username} </div>
-                   <div>Password: {userInformation[0].password} </div>
-                   <div>Location: {userInformation[0].location} </div>
-                   <div>Temperature: {userInformation[0].temperature} </div>
-                   <div>userStatus: {userInformation[0].userStatus} </div>
-                  </div>
-              }
-              <Fragment>
-                <button>Edit</button>
-
-                <form onSubmit={this.editAccount}>
-
-                  <label>Name:</label>
-                  <input type="text" placeholder={userInformation[0].name} editname={this.state.value} onChange={this.handleeditname} />
-                  <br/>
-
-                  <label>Username</label>
-                  <input type="text" placeholder={userInformation[0].username} editusername={this.state.value} onChange={this.handleeditusername}/><br/>
-
-                  <label>Password</label>
-                  <input type="text" placeholder={userInformation[0].password} editpassword={this.state.value} onChange={this.handleeditpassword}/><br/>
-
-                  <label>Location</label>
-                  <input type="text" placeholder={userInformation[0].location} editlocation={this.state.value} onChange={this.handleeditlocation}/><br/>
-
-                  <select edittemperature={this.state.value} onChange={this.handleedittemperature}>
-                      <option  value="">Temperature</option>
-                      <option  value="C">Celcius</option>
-                      <option value="F">Fahrenheit</option>
-                  </select><br/>
-
-                  <input type="submit" value="Confirm changes" />
-
-                </form>
-
-                {/* {console.log("edit userinfo", this.state.editUserinformation)} */}
-              </Fragment>
-
-          </Fragment>
-
-        )
-    }
-}
-export default withStorage(AccountComponent);
+export default withRouter(withStorage(AccountComponent));

@@ -1,275 +1,320 @@
-import Card from '@material-ui/core/Card';
-import style from '../styles/Card.module.css';
+// CSS and Material Design Imports
+import style from '../styles/User.module.css';
 import '../icons/weather.css';
+import TextField from '@material-ui/core/TextField';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Select from '@material-ui/core/Select';
 
+// Core functionality from react and axios.
 import React, { Component } from 'react';
 import axios from 'axios';
+import PropTypes from "prop-types";
 
+// HOC imports.
 import withStorage from './../services/withStorage';
 
-import ErrorScreen from './../screens/ErrorScreen';
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#1d1e20'
+    }
+  }
+});
 
-
-
-//validates registration form 
-function validateForm(name, username, password, location, temperature) {
-    
-    return {
-      name: name.length < 2,
-      username: username === "",
-      password: password.length < 6,
-      location: location.length === 0,
-      temperature: temperature === ""
-    };
+//validates registration form
+function validateForm(name, username, password, temperature) {
+  return {
+    name: name.length < 2,
+    username: username === '',
+    password: password.length < 6,
+    temperature: temperature === ''
+  };
 }
 
+// This component handles the bulk of the user's experience through our app, including
+// logging in, registering for the first time. User information is sent to Softhouse's API,
+// saved in localStorage, which is retrieved on a as-needed basis.
 class UserComponent extends Component {
+  static propTypes = {
+    history: PropTypes.object,
+    match: PropTypes.object,
+    location: PropTypes.object,
+    getUser: PropTypes.func,
+    getUsers: PropTypes.func,
+    addUser: PropTypes.func,
+    login: PropTypes.func
+  };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            showRegister: false, 
-    
-            //these get in userInformation in registration
-            name: "",
-            username: "",
-            password: "",
-            location: "",
-            temperature: "",
-            userStatus: "offline",
+  constructor(props) {
+    super(props);
+    this.state = {
+      showRegister: false,
 
-            //validation
-            touched: {
-                name: false,
-                username: false,
-                password: false,
-                location: false,
-                temperature: false,
-            },
+      name: '',
+      username: '',
+      password: '',
+      temperature: 'C',
 
-            //contains info from registration
-            userInformation: [],
-        
-            //used to compare userincormation.username &usernameLogin etc.
-            usernameLogin: "",
-            passwordLogin: "",
+      //validation
+      touched: {
+        name: false,
+        username: false,
+        password: false,
+        temperature: false
+      },
 
-            //softhouse user data
-            userData: [],
+      //used to compare userinformation.username & usernameLogin etc.
+      usernameLogin: '',
+      passwordLogin: '',
 
-            //errormessage
-            error: false,
-        };
+      //softhouse user data
+      userData: [],
 
-    }
-
-    //updates the showRegister state and shows the registration form 
-    showForm = () => {
-        this.setState({ showRegister: true })
+      //errormessage
+      error: false
     };
+  }
 
-    //updates the name state to the value the user inputed in the registration form
-    handleNameChange = (event) => {
-        this.setState({ name: event.target.value });
-    };
+  //updates the showRegister state and toggles the registration form
+  showForm = () => {
+    this.setState({ showRegister: !this.state.showRegister });
+  };
 
-    //updates the username state to the value the user inputed in the registration form
-    handleUsernameChange = (event) => {
-        this.setState({ username: event.target.value });
-    };
-    
-    //updates the password state to the value the user inputed in the registration form
-    handlePasswordChange = (event) => {
-        this.setState({ password: event.target.value });
-    };
+  //updates a field's state to true if it was touched
+  handleBlur = field => event => {
+    this.setState({
+      touched: { ...this.state.touched, [field]: true }
+    });
+  };
 
-    //updates the location state to the value the user inputed in the registration form
-    handleLocationChange = (event) => {
-        this.setState({ location: event.target.value });
-    };
-    
-    //updates the temperature state to the value the user inputed in the registration form
-    handleTemperatureChange = (event) => {
-        this.setState({ temperature: event.target.value });
-    };
+  // One function to handle all the input field data changes, where 'name' is field changed
+  // and event is the incoming data change to that field. This function then sets the appropriate state.
+  handleInputChange = name => event => {
+    const state = {};
+    state[name] = event.target.value;
+    this.setState(state);
+  };
 
-    //updates a field's state to true if it was touched
-    handleBlur = (field) => (event) => {
-        this.setState({
-          touched: { ...this.state.touched, [field]: true }
-        });
-    };
+  //registers the user by updating the userInformation
+  onRegistration = event => {
+    event.preventDefault();
+    this.props.login(this.state.username);
 
-    //this state is needed to update userStatus
-    updateStatus = () => {
-        this.setState({ userStatus: "online" }); //if I dont put it here it wont update the state
-    }
-
-    //registers the user by updating the userInformation and the userStatus state 
-    onRegistration = (event) => {
-        event.preventDefault();
-    
-        const registerUser = this.state.userInformation.concat([{
-            name: this.state.name, 
-            username: this.state.username, 
-            password: this.state.password, 
-            location: this.state.location, 
-            temperature: this.state.temperature,
-            userStatus: this.state.userStatus
-        }]);    
-        
-        this.setState({ userInformation: registerUser });   
-        localStorage.setItem("user", this.state.username);
-
-        const axiosConfig = {
-            headers: {
-                'Content-Type': 'application/json;charset=UTF-8',
-                "Access-Control-Allow-Origin": "*",
-            }
-        };
-      
-        const newUser = {
-            name: this.state.name ,
-            username: this.state.username,
-            email: this.state.password,
-            address: {
-                street: 'mock street 12',
-                suite: this.state.userStatus, //changed to online
-                city: this.state.location,
-                zipcode: this.state.temperature,
-                geo: {
-                    lat: 0,
-                    lng: 0
-                }
-            }
+    const newUser = {
+      name: this.state.name,
+      username: this.state.username,
+      email: this.state.password,
+      address: {
+        street: 'mock street 12',
+        suite: 'mock',
+        city: 'Stockholm',
+        zipcode: this.state.temperature,
+        geo: {
+          lat: 0,
+          lng: 0
         }
-      
-        axios.post('http://api.softhouse.rocks/users/', newUser, axiosConfig)
-        .then(function (response) {
-            console.log("Success:", response.data);
-        })
-        .catch(function (error) {
-            console.log("Error:", error.response);
-        });
+      }
+    };
+
+    // Posts user information on user registration, and posts it to Softhouse's API using axios' options.
+    // Then redirects the user to dashboard.
+    const axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Access-Control-Allow-Origin': '*'
+      }
+    };
+
+    axios
+      .post('http://api.softhouse.rocks/users/', newUser, axiosConfig)
+      .then(response => {
+        this.props.addUser(response.data);
         this.props.history.push('/dashboard');
+      });
+  };
+
+  // Getting user data from Softhouse API though withStorage HOC and sets userData. 
+  // Logged in user is redirected to the dashboard.
+  componentDidMount() {
+    const user = this.props.getUser();
+    if (user !== null) {
+      this.props.history.push('/dashboard');
+      return;
     }
+    this.props
+      .getUsers()
+      .then(response => this.setState({ userData: response.data }));
+  }
 
-    //updates the usernameLogin state to the value the user inputed in the login form
-    handleUsernameLoginChange = (event) => {
-        this.setState({ usernameLogin: event.target.value });    
+  //checks if user is registered by comparing username & password to API, updates error, sets localStorage to username (withStorage)
+
+  // If the user successfully logs in, their information is saved in localStorage.
+  // A successful login redirects the user to the dashboard.
+  loginUser = event => {
+    event.preventDefault();
+    const user = this.state.userData.reduce((prev, user) => {
+      return user.username === this.state.usernameLogin &&
+        user.email === this.state.passwordLogin
+        ? user
+        : prev;
+    }, undefined);
+    if (user === undefined) {
+      this.setState({ error: true });
+      return;
     }
+    this.props.login(user.username);
+    this.props.addUser(user);
+    this.props.history.push('/dashboard');
+  };
 
-    //updates the passwordLogin state to the value the user inputed in the login form
-    handlePasswordLoginChange = (event) => {
-        this.setState({ passwordLogin: event.target.value });
-    }
+  render() {
+    //sends user's inputs from registration to validation
+    const errors = validateForm(
+      this.state.name,
+      this.state.username,
+      this.state.password,
+      this.state.temperature
+    );
 
-    //getting user data from Softhouse API though HOC
-    componentDidMount(){ 
-        this.props.getUser()
-        .then(response =>
-            this.setState({ userData: response.data })
-        ); 
-    }
+    //disable button if errors keys (name, username, password etc.) includes an error
+    const isDisabled = Object.keys(errors).some(x => errors[x]);
 
-    //checks if user is registered by comparing username & password to API, updates error, userStatus and sets localStorage to username (withStorage)
-    loginUser = (event) => {   
-        this.state.userData.filter(user => (user.username === this.state.usernameLogin && user.email === this.state.passwordLogin) ?
-            (this.props.login('user', user.username),
-            this.setState({ userStatus: "online" }),
-            this.props.history.push('/dashboard'))
-            : 
-            (this.setState({ error: true }),
-            console.log(this.state.userStatus))
-        );
-        event.preventDefault();
-    }
+    //if an error is catched in a field update that field's state after its touched
+    const shouldMarkError = field => {
+      const checkError = errors[field];
+      const shouldShowError = this.state.touched[field];
+      return checkError ? shouldShowError : false;
+    };
 
-    //updates the userStatus state and clears username from localStorage if checkStatus is true (withStorage)
-    logoutUser = (event) => {
-        if (this.props.checkStatus) {
-            this.setState({ userStatus: "offline" });
-            this.props.logout();
-            this.props.history.push('/login');
-        }
-    }
-    
-    render() {           
+    return (
+      <div>
+        <div className="icon center thunder-storm">
+          <div className="cloud"></div>
+          <div className="cloud"></div>
+          <div className="lightning">
+            <div className="bolt"></div>
+            <div className="bolt"></div>
+          </div>
+        </div>
+        <div className={style.card}>
+          <div>
 
-        //sends user's inputs from registration to validation 
-        const errors = validateForm(this.state.name, this.state.username, this.state.password, this.state.location, this.state.temperature);
+            {this.state.error && <span className={style.texterror}>User credentials invalid.</span>}
+            {!this.state.error && <span className={style.textlogin}>Please login.</span>}
 
-        //disable button if errors keys (name, username, password etc.) includes an error
-        const isDisabled = Object.keys(errors).some(x => errors[x]);
+            <form onSubmit={this.loginUser}>
+              <div className={style.center}>
+                <MuiThemeProvider theme={theme}>
+                  <div className={style.center}>
+                    <TextField
+                      margin='normal'
+                      label='Username'
+                      variant='outlined'
+                      type='text'
+                      value={this.state.usernameLogin}
+                      onChange={this.handleInputChange('usernameLogin')}
+                    />
+                  </div>
+                  <div className={style.center}>
+                    <TextField
+                      margin='normal'
+                      label='Password'
+                      variant='outlined'
+                      type='text'
+                      value={this.state.passwordLogin}
+                      onChange={this.handleInputChange('passwordLogin')}
+                    />
+                  </div>
+                </MuiThemeProvider>
+                <div />
+              </div>
 
-        //if an error is catched in a field update that field's state after its touched
-        const shouldMarkError = (field) => {
-            const checkError = errors[field];   
-            const shouldShowError = this.state.touched[field]; 
-            return checkError ? shouldShowError : false;    
-        };
+              <br />
+              <button className={style.btn}>Login</button>
+            </form>
+            <br />
+            <hr />
+            <div onClick={this.showForm} className={style.textlogin}>
+              Don't have an account? Click here!
+          </div>
 
-        return (
-            <Card className={style["card"]} style={{ backgroundColor: '#000' }}>
-                <div>
-                    <form onSubmit={this.loginUser}>
-                        <input type="text" placeholder="username" 
-                        value={this.state.usernameLogin}
-                        onChange={this.handleUsernameLoginChange}/>
-                        
-                        <input type="text" placeholder="password" 
-                        value={this.state.passwordLogin}
-                        onChange={this.handlePasswordLoginChange}/><br/>
+          </div>
 
-                        {this.state.error ?
-                        <ErrorScreen errorMessage={this.state.error}/>: null
-                    } 
-                        <button>Login</button>
-                    </form>
+          {this.state.showRegister ? (
+            <div>
+              <form onSubmit={this.onRegistration}>
 
-                      
-                    <button onClick={this.logoutUser}>Logout</button><br/><br/>
-                    <button onClick={this.showForm} style={{ backgroundColor: this.state.showRegister ? "#0066cc" : "#808080" }}>Don't have an account? Click here!</button><br/><br/>
+                <div className={style.center}>
+                  <MuiThemeProvider theme={theme}>
+
+                    <div className={style.center}>
+                      <TextField
+                        required
+                        className={shouldMarkError('name') ? 'error' : ''}
+                        margin='normal'
+                        label='Name'
+                        variant='outlined'
+                        type='text'
+                        value={this.state.name}
+                        onChange={this.handleInputChange('name')}
+                        onBlur={this.handleBlur('name')}
+                      />
+                    </div>
+
+                    <div className={style.center}>
+                      <TextField
+                        required
+                        className={shouldMarkError('username') ? 'error' : ''}
+                        margin='normal'
+                        label='Username'
+                        variant='outlined'
+                        type='text'
+                        value={this.state.username}
+                        onChange={this.handleInputChange('username')}
+                        onBlur={this.handleBlur('username')}
+                      />
+                    </div>
+
+                    <div className={style.center}>
+                      <TextField
+                        required
+                        className={shouldMarkError('password') ? 'error' : ''}
+                        type='password'
+                        margin='normal'
+                        label='Password'
+                        variant='outlined'
+                        value={this.state.password}
+                        onChange={this.handleInputChange('password')}
+                        onBlur={this.handleBlur('password')}
+                      />
+                    </div>
+
+                  </MuiThemeProvider>
+                  <div />
                 </div>
-            
-                {this.state.showRegister ? 
-                    <div>
-                        <form onSubmit={this.onRegistration}>
-                            <input className={shouldMarkError("name") ? "error" : ""} 
-                            type="text" placeholder="name" 
-                            value={this.state.name}  
-                            onChange={this.handleNameChange}
-                            onBlur={this.handleBlur('name')}/>
+                <br />
 
-                            <input className={shouldMarkError("username") ? "error" : ""} 
-                            type="text" placeholder="username" 
-                            value={this.state.username} 
-                            onChange={this.handleUsernameChange}
-                            onBlur={this.handleBlur('username')}/>
-        
-                            <input className={shouldMarkError("password") ? "error" : ""} 
-                            type="text" placeholder="password" 
-                            value={this.state.password} 
-                            onChange={this.handlePasswordChange}
-                            onBlur={this.handleBlur('password')}/>
-                           
-                            <input className={shouldMarkError("location") ? "error" : ""} 
-                            type="text" placeholder="location" 
-                            value={this.state.location} onChange={this.handleLocationChange}
-                            onBlur={this.handleBlur('location')}/><br/>
-                        
-                            <select value={this.state.temperature} onChange={this.handleTemperatureChange}>
-                                <option value="">temperature</option>
-                                <option value="C">Celcius</option>
-                                <option value="F">Fahrenheit</option>
-                            </select><br/>
-    
-                            <button disabled={isDisabled} onClick={this.updateStatus}>Register</button> 
-                        </form>
-                    </div> :null
-                }
-            </Card>
-        )
-    } 
+                <Select
+                  native
+                  value={this.state.temperature}
+                  onChange={this.handleInputChange('temperature')}
+                >
+                 
+                  <option value='C'>Celcius</option>
+                  <option value='F'>Fahrenheit</option>
+                </Select>
+                <br />
+                <br />
+
+                <button className={style.btn} disabled={isDisabled}>
+                  Register
+              </button>
+              </form>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    );
+  }
 }
 export default withStorage(UserComponent);
