@@ -61,6 +61,12 @@ class AccountComponent extends Component {
   // is then redirected to login (/). If the user does exist, the information is grabbed
   // from Softhouse's API and set as the state with the help of setUserInformation.
   componentDidMount() {
+
+    // Title for UX/Accessability 
+    document.title = `The Weather - Your Account`;
+
+    // If a user who is not logged in tries to access the dashboard, they are redirected
+    // to the login page.
     const user = this.props.getUser();
     if (user === null) {
       this.props.history.push('/');
@@ -115,7 +121,8 @@ class AccountComponent extends Component {
   render() {
     const { name, username, temperature } = this.state;
     return (
-      <div>
+      <div role="main">
+        <h1 className={style.visuallyhidden}>The Weather - Your Account</h1>
         <div className="icon center flurries">
           <div className="cloud"></div>
           <div className="cloud"></div>
@@ -137,6 +144,7 @@ class AccountComponent extends Component {
             <MuiThemeProvider theme={theme}>
               <TextField
                 margin='normal'
+                id="name"
                 label='Name'
                 variant='outlined'
                 type='text'
@@ -147,6 +155,7 @@ class AccountComponent extends Component {
 
               <TextField
                 margin='normal'
+                id="username"
                 label='Username'
                 variant='outlined'
                 type='text'
@@ -157,6 +166,7 @@ class AccountComponent extends Component {
 
               <TextField
                 margin='normal'
+                id="password"
                 label='Password'
                 variant='outlined'
                 type='password'
@@ -166,18 +176,24 @@ class AccountComponent extends Component {
               <br />
               <br />
 
-              <Select
-                native
-                value={temperature}
-                onChange={this.handleInputChange('temperature')}
-              >
+              <label><span className={style.textlogin}>Choose temperature unit:</span>
+                <br />
+                <br />
+                <Select
+                  native
+                  id="temperature"
+                  inputprops={{ 'aria-label': 'Temperature Unit' }}
+                  aria-label="Temperature"
+                  value={temperature}
+                  onChange={this.handleInputChange('temperature')}
+                >
 
-                <option value='C'>Celcius</option>
-                <option value='F'>Fahrenheit</option>
-              </Select>
-              <br />
-              <br />
-
+                  <option value='C' inputprops={{ 'aria-label': 'Celcius' }} aria-label="Celcius" id="celcius">Celcius</option>
+                  <option value='F' inputprops={{ 'aria-label': 'Fahrenheit' }} aria-label="Fahrenheit" id="fahrenheit">Fahrenheit</option>
+                </Select>
+                <br />
+                <br />
+              </label>
 
               <button className={style.btn} type='submit'>Confirm Changes</button>
             </MuiThemeProvider>

@@ -71,7 +71,11 @@ class UserComponent extends Component {
       userData: [],
 
       //errormessage
-      error: false
+      error: false,
+
+      // handling error 500 from Softhouse (duplicate key)
+      caughtError: false
+
     };
   }
 
@@ -117,7 +121,7 @@ class UserComponent extends Component {
     };
 
     // Posts user information on user registration, and posts it to Softhouse's API using axios' options.
-    // Then redirects the user to dashboard.
+    // Then redirects the user to dashboard. If the user registration already exists, render error.
     const axiosConfig = {
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
@@ -130,12 +134,20 @@ class UserComponent extends Component {
       .then(response => {
         this.props.addUser(response.data);
         this.props.history.push('/dashboard');
-      });
+      }).catch(error => {
+        if (error.response.data.code === 11000) {
+          this.setState({ caughtError: true });
+        }
+      })
   };
 
   // Getting user data from Softhouse API though withStorage HOC and sets userData. 
-  // Logged in user is redirected to the dashboard.
   componentDidMount() {
+
+    // Title for UX/Accessability 
+    document.title = `The Weather - Login`;
+
+    // Logged in user is redirected to the dashboard.
     const user = this.props.getUser();
     if (user !== null) {
       this.props.history.push('/dashboard');
@@ -187,7 +199,8 @@ class UserComponent extends Component {
     };
 
     return (
-      <div>
+      <div role="main">
+        <h1 className={style.visuallyhidden}>The Weather</h1>
         <div className="icon center thunder-storm">
           <div className="cloud"></div>
           <div className="cloud"></div>
@@ -203,11 +216,12 @@ class UserComponent extends Component {
             {!this.state.error && <span className={style.textlogin}>Please login.</span>}
 
             <form onSubmit={this.loginUser}>
-              <div className={style.center}>
+              <div className={style.center} >
                 <MuiThemeProvider theme={theme}>
-                  <div className={style.center}>
+                  <div className={style.center} role="form">
                     <TextField
                       margin='normal'
+                      id='Login Username'
                       label='Username'
                       variant='outlined'
                       type='text'
@@ -218,9 +232,10 @@ class UserComponent extends Component {
                   <div className={style.center}>
                     <TextField
                       margin='normal'
+                      id='Login Password'
                       label='Password'
                       variant='outlined'
-                      type='text'
+                      type='password'
                       value={this.state.passwordLogin}
                       onChange={this.handleInputChange('passwordLogin')}
                     />
@@ -237,21 +252,22 @@ class UserComponent extends Component {
             <div onClick={this.showForm} className={style.textlogin}>
               Don't have an account? Click here!
           </div>
-
+            <hr />
           </div>
 
           {this.state.showRegister ? (
             <div>
               <form onSubmit={this.onRegistration}>
 
-                <div className={style.center}>
+                <div className={style.center} role="form">
                   <MuiThemeProvider theme={theme}>
-
                     <div className={style.center}>
+                      {this.state.caughtError && <span className={style.texterror}>User already exists.</span>}
                       <TextField
                         required
                         className={shouldMarkError('name') ? 'error' : ''}
                         margin='normal'
+                        id='enter-name'
                         label='Name'
                         variant='outlined'
                         type='text'
@@ -266,6 +282,7 @@ class UserComponent extends Component {
                         required
                         className={shouldMarkError('username') ? 'error' : ''}
                         margin='normal'
+                        id='enter-username'
                         label='Username'
                         variant='outlined'
                         type='text'
@@ -281,6 +298,7 @@ class UserComponent extends Component {
                         className={shouldMarkError('password') ? 'error' : ''}
                         type='password'
                         margin='normal'
+                        id='enter-password'
                         label='Password'
                         variant='outlined'
                         value={this.state.password}
@@ -293,16 +311,22 @@ class UserComponent extends Component {
                   <div />
                 </div>
                 <br />
+                <label><span className={style.textlogin}>Choose temperature unit:</span>
+                  <br />
+                  <br />
+                  <Select
+                    native
+                    id="temperature"
+                    inputprops={{ 'aria-label': 'Temperature Unit' }}
+                    aria-label="Temperature"
+                    value={this.state.temperature}
+                    onChange={this.handleInputChange('temperature')}
+                  >
 
-                <Select
-                  native
-                  value={this.state.temperature}
-                  onChange={this.handleInputChange('temperature')}
-                >
-                 
-                  <option value='C'>Celcius</option>
-                  <option value='F'>Fahrenheit</option>
-                </Select>
+                    <option value='C' inputprops={{ 'aria-label': 'Celcius' }} aria-label="Celcius" id="celcius">Celcius</option>
+                    <option value='F' inputprops={{ 'aria-label': 'Fahrenheit' }} aria-label="Fahrenheit" id="fahrenheit">Fahrenheit</option>
+                  </Select>
+                </label>
                 <br />
                 <br />
 
