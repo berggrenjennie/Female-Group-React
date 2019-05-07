@@ -23,7 +23,7 @@ import { Markup } from 'interweave';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#dfddda'
+      main: '#fff'
     }
   }
 });
@@ -64,8 +64,11 @@ class DashboardComponent extends Component {
   /*A method that calls the function (getWeather()) and (getLocation()) which they are props received from withHttp component. */
   componentDidMount() {
 
+    // Title for UX/Accessability 
+    document.title = `The Weather - Dashboard`;
+
     // If a user who is not logged in tries to access the dashboard, they are redirected
-    // to the dashboard.
+    // to the login page.
     const user = this.props.getUser();
     if (user === null) {
       this.props.history.push('/');
@@ -187,7 +190,8 @@ class DashboardComponent extends Component {
     const tempUnit = user.address.zipcode.toUpperCase();
 
     return (
-      <div className={style.card}>
+      <div className={style.card} role="main">
+      <h1 className={style.visuallyhidden}>The Weather - Dashboard</h1>
         <div className={style.center}>
           <p className={style.golduser}>Hello, {user.name}!</p>
         </div>
@@ -227,7 +231,7 @@ class DashboardComponent extends Component {
                         margin='normal'
                         style={{
                           background:
-                            'linear-gradient(to bottom, rgba(233, 233, 233, 0.37) 0%,rgba(144, 144, 145, 0.089) 100%)'
+                            '#717171'
                         }}
                         label='Enter City'
                         variant='outlined'

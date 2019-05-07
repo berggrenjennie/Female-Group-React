@@ -85,6 +85,7 @@ class NavbarComponent extends Component {
             <Toolbar>
               <div>
                 <IconButton
+                  aria-label="Menu"
                   className={classes.menuButton}
                   aria-owns={open ? 'menu-appbar' : undefined}
                   aria-haspopup='true'
