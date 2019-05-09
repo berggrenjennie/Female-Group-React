@@ -44,7 +44,9 @@ class AccountComponent extends Component {
       name: '',
       username: '',
       email: '',
-      temperature: ''
+      temperature: '',
+      // handling error 500 from Softhouse (duplicate key)
+      caughtError: false
     };
   }
 
@@ -115,7 +117,11 @@ class AccountComponent extends Component {
       .then(response => {
         this.props.addUser(response.data);
         this.props.history.push('/dashboard');
-      });
+      }).catch(error => {
+        if (error.response.data.code === 11000) {
+          this.setState({ caughtError: true });
+        }
+      })
   };
 
   render() {
@@ -140,6 +146,7 @@ class AccountComponent extends Component {
             <div className={style.textlogin}>Temperature: {temperature} </div>
           </div>
           <hr />
+          {this.state.caughtError && <span className={style.texterror}>User already exists.</span>}
           <form onSubmit={this.editAccount}>
             <MuiThemeProvider theme={theme}>
               <TextField

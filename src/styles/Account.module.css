@@ -35,6 +35,14 @@
     text-align: center;
 }
 
+.texterror {
+	font-family: 'Lora', serif;
+	font-size: 17px;
+	color: #bb065a;
+	padding: 5px;
+ 
+}
+
 .btn {
 	background-color: #666666;
 	border-radius: 4px;
